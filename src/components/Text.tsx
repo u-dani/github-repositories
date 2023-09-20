@@ -13,26 +13,36 @@ const fontSize: size = {
   base: '1rem',
   lg: '1.125rem',
   xl: '1.25rem',
-  xxl: '2.25rem',
+  xxl: 'clamp(1.5rem, 1.5rem + 1vw, 2.25rem)',
 }
-
 const lineHeight: size = {
   sm: '1.25rem',
   base: '1.5rem',
   lg: '1.75rem',
   xl: '1.75rem',
-  xxl: '2.5rem',
+  xxl: 'clamp(1.75rem, 1.75rem + 1vw, 2.5rem)',
 }
 
 interface ITextProps {
   size?: keyof size
   align?: 'start' | 'center' | 'end' | 'justify'
+  weight?: 'light' | 'regular' | 'bold'
 }
 
 export const Text = styled.span<ITextProps>`
   font-size: ${({ size }) => (size ? fontSize[size] : fontSize.base)};
   line-height: ${({ size }) => (size ? lineHeight[size] : lineHeight.base)};
   text-align: ${({ align }) => (align ? align : 'start')};
+  font-weight: ${props => {
+    switch (props.weight) {
+      case 'light':
+        return 300
+      case 'bold':
+        return 500
+      default:
+        return 400
+    }
+  }};
 `
 
 /*
