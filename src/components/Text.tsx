@@ -26,13 +26,13 @@ const lineHeight: size = {
 
 interface ITextProps {
   size?: keyof size
-  textAlign?: 'start' | 'center' | 'end' | 'justify' | 'left' | 'right'
+  align?: 'start' | 'center' | 'end' | 'justify'
 }
 
 export const Text = styled.span<ITextProps>`
   font-size: ${({ size }) => (size ? fontSize[size] : fontSize.base)};
   line-height: ${({ size }) => (size ? lineHeight[size] : lineHeight.base)};
-  text-align: ${({ textAlign }) => (textAlign ? textAlign : 'start')};
+  text-align: ${({ align }) => (align ? align : 'start')};
 `
 
 /*
