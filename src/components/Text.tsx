@@ -26,7 +26,7 @@ const lineHeight: size = {
 
 interface ITextProps {
   size?: keyof size
-  textAlign: 'start' | 'center' | 'end' | 'justify' | 'left' | 'right'
+  textAlign?: 'start' | 'center' | 'end' | 'justify' | 'left' | 'right'
 }
 
 export const Text = styled.span<ITextProps>`
