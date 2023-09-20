@@ -28,3 +28,9 @@ a {
 body {
   min-height: 100vh;
 }
+
+button {
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+}
