@@ -15,6 +15,7 @@ interface IWrapperFlexProps {
     | 'stretch'
   alignItems?: 'start' | 'center' | 'end' | 'stretch'
   wrap?: boolean
+  padding?: string
 }
 
 export const WrapperFlex = styled.div<IWrapperFlexProps>`
@@ -26,4 +27,5 @@ export const WrapperFlex = styled.div<IWrapperFlexProps>`
   justify-content: ${props => props.justifyContent ?? 'center'};
   align-items: ${props => props.justifyContent ?? 'center'};
   flex-wrap: ${props => (props.wrap ? 'wrap' : 'nowrap')};
+  padding: ${({ padding }) => (padding ? padding : '0px')};
 `
