@@ -16,7 +16,7 @@ export const Button = styled.button<IButtonProps>`
   height: ${props => props.height ?? '50px'};
   width: ${props => props.width ?? '200px'};
 
-  color: #fff;
+  color: rgba(250, 250, 250, 0.9);
   transition: all 0.5s;
   position: relative;
 
