@@ -6,11 +6,12 @@ interface ISelectProps {
   placeholder?: string
   selectedValue?: string
   width?: string
+  height?: string
   options: string[]
   handleSelect: (selectedTargetValue: string) => void
 }
 
-const SelectStyle = styled.div<{ width?: string }>`
+const SelectStyle = styled.div<{ width?: string; height?: string }>`
   position: relative;
   width: ${({ width }) => width ?? '100%'};
 
@@ -26,6 +27,7 @@ const SelectStyle = styled.div<{ width?: string }>`
     border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
+    height: ${({ height }) => height ?? 'auto'};
   }
 
   #iselect-checkbox:checked + .container-selected-value {
@@ -93,6 +95,7 @@ export const Select = ({
   options,
   handleSelect,
   width,
+  height,
   selectedValue,
 }: ISelectProps) => {
   const checkbox = document.querySelector<HTMLInputElement>('#iselect-checkbox')
@@ -108,7 +111,7 @@ export const Select = ({
   }
 
   return (
-    <SelectStyle width={width}>
+    <SelectStyle width={width} height={height}>
       <input type='checkbox' id='iselect-checkbox' />
 
       <WrapperFlex
