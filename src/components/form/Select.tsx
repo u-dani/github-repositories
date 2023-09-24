@@ -14,6 +14,7 @@ interface ISelectProps {
 const SelectStyle = styled.div<{ width?: string; height?: string }>`
   position: relative;
   width: ${({ width }) => width ?? '100%'};
+  font-size: 1rem;
 
   .selected-value {
     overflow: hidden;
@@ -117,7 +118,7 @@ export const Select = ({
       <WrapperFlex
         justifyContent='space-between'
         className='container-selected-value'
-        gap='8px'>
+        gap='4px'>
         <span className='selected-value'>
           {selectedValue ?? placeholder ?? 'Selecione'}
         </span>
