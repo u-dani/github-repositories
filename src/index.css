@@ -27,24 +27,26 @@ a {
 
 body {
   min-height: 100vh;
-  background: #232526;
-  background: -webkit-linear-gradient(90deg, #414345, #232526);
-  background: linear-gradient(90deg, #414345, #232526);
-  background-size: 400% 100%;
-  animation: background-animation 20s ease infinite alternate;
-
-  @keyframes background-animation {
-    from {
-      background-position-x: 0%;
-    }
-    to {
-      background-position-x: 100%;
-    }
-  }
+  /* background: #232526; */
+  background: linear-gradient(90deg, #191919, #333333, #4d4d4d);
+  background-size: 300% 300%;
+  animation: bg 20s infinite alternate;
 }
 
 button {
   cursor: pointer;
   outline: none;
   text-align: center;
+}
+
+@keyframes bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
