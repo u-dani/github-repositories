@@ -24,7 +24,7 @@ const SelectStyle = styled.div<{ width?: string }>`
     border: 1px solid rgba(250, 250, 250, 0.4);
     color: rgba(250, 250, 250, 0.4);
     border-radius: 4px;
-    padding: 10px 16px;
+    padding: 8px 12px;
     cursor: pointer;
   }
 
@@ -63,6 +63,7 @@ const SelectStyle = styled.div<{ width?: string }>`
   .container-options {
     display: none;
     position: absolute;
+    min-width: max-content;
     width: 100%;
     flex-direction: column;
     background-color: #333;
