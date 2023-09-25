@@ -27,10 +27,12 @@ a {
 
 body {
   min-height: 100vh;
-  /* background: #232526; */
+  background: #191919;
   background: linear-gradient(90deg, #191919, #333333, #4d4d4d);
   background-size: 300% 300%;
   animation: bg 20s infinite alternate;
+  display: flex;
+  justify-content: center;
 }
 
 button {
