@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 interface IWrapperFlexProps {
   width?: string
+  maxWidth?: string
   height?: string
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse'
   gap?: string
@@ -16,10 +17,13 @@ interface IWrapperFlexProps {
   alignItems?: 'start' | 'center' | 'end' | 'stretch'
   wrap?: boolean
   padding?: string
+  position?: 'relative'
 }
 
 export const WrapperFlex = styled.div<IWrapperFlexProps>`
+  position: ${({ position }) => position ?? 'static'};
   width: ${props => props.width ?? '100%'};
+  max-width: ${props => props.maxWidth ?? '100%'};
   height: ${props => props.height ?? 'auto'};
   display: flex;
   flex-direction: ${props => props.direction ?? 'row'};
