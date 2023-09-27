@@ -11,7 +11,6 @@ interface InputProps {
 
 export const Input = styled.input<InputProps>`
   border-radius: 4px;
-  border: 1px solid transparent;
   color: rgba(255, 255, 255, 0.9);
   font-size: ${props => props.fontSize || '1.2rem'};
   outline: none;
