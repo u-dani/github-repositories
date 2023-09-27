@@ -4,7 +4,7 @@ import './index.css'
 
 import App from './App.tsx'
 import { UserPage } from './pages/UserPage.tsx'
-import { RepositoriesPage } from './pages/repositoriesPage.tsx'
+import { RepositoriesPage } from './pages/RepositoriesPage.tsx'
 import { ErrorPage } from './pages/ErrorPage.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
