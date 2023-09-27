@@ -13,8 +13,8 @@ interface ISelectProps {
 
 const SelectStyle = styled.div<{ width?: string; height?: string }>`
   position: relative;
-  width: ${({ width }) => width ?? '100%'};
   font-size: 1rem;
+  width: ${({ width }) => width ?? '100%'};
 
   .selected-value {
     overflow: hidden;
@@ -23,6 +23,7 @@ const SelectStyle = styled.div<{ width?: string; height?: string }>`
   }
 
   .container-selected-value {
+    width: 100%;
     border: 1px solid rgba(250, 250, 250, 0.4);
     color: rgba(250, 250, 250, 0.4);
     border-radius: 4px;
@@ -105,7 +106,6 @@ export const Select = ({
     checkbox?.click()
     const target = e.target as HTMLInputElement
     const selectedTargetValue = target.getAttribute('data-option')
-    console.log(selectedTargetValue)
     if (selectedTargetValue) {
       handleSelect(selectedTargetValue)
     }
