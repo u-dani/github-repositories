@@ -1,11 +1,13 @@
 import { X } from 'lucide-react'
 import styled from 'styled-components'
 import { WrapperFlex } from './layout/WrapperFlex'
+import { useEffect } from 'react'
 
-interface IMessageProps {
+export interface IMessageProps {
   message: string
   state: 'success' | 'warning' | 'error'
   show: boolean
+  timeOut?: number
   handleClose: () => void
 }
 
@@ -50,14 +52,14 @@ const MessageStyle = styled.span<Pick<IMessageProps, 'state'>>`
   }
 `
 
-const ProgressBar = styled.span`
+const ProgressBar = styled.span<Pick<IMessageProps, 'timeOut'>>`
   width: 100%;
   background: yellow;
   height: 2px;
   position: absolute;
   bottom: 0;
   left: 0;
-  animation: p-bar 3s linear forwards;
+  animation: ${({ timeOut }) => `p-bar ${timeOut ?? 3000}ms linear forwards`};
   border-radius: 4px;
 
   @keyframes p-bar {
@@ -74,13 +76,19 @@ export const Message = ({
   message,
   state,
   show,
+  timeOut,
   handleClose,
 }: IMessageProps) => {
+  useEffect(() => {
+    const timer = setTimeout(handleClose, timeOut ?? 3000)
+    return () => clearTimeout(timer)
+  }, [show])
+
   return (
     show && (
       <MessageStyle state={state}>
         <WrapperFlex justifyContent='space-between'>
-          <ProgressBar />
+          <ProgressBar timeOut={timeOut} />
           <span>{message}</span>
           <button className='btn' onClick={handleClose}>
             <X className='icon' />
@@ -91,4 +99,4 @@ export const Message = ({
   )
 }
 
-// melhorar o progress bar, parece mt engessado
+// mudar a forma que a message aparece e some :D, uma animação
