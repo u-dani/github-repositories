@@ -38,7 +38,7 @@ function App() {
       searchInputRef.current?.value ?? ''
     )
 
-    if (!searchInputValue || searchInputValue.length < 3) {
+    if (!searchInputValue) {
       setMessageData({
         ...messageData,
         show: true,
