@@ -12,6 +12,7 @@ interface ISearchUserResponse {
     html_url: string
     id: string
     location: string
+    twitter_username: string
 }
 
 export const searchUser = async(username: string): Promise<ISearchUserResponse> => {
