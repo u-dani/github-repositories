@@ -1,6 +1,6 @@
 import { api } from "./api"
 
-interface ISearchUserResponse {
+export interface ISearchUserResponse {
     avatar_url: string
     bio: string | null
     blog: string
@@ -13,6 +13,7 @@ interface ISearchUserResponse {
     html_url: string
     id: number
     location: string | null
+    name: string
     twitter_username: string | null
 }
 
