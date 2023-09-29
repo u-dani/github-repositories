@@ -7,4 +7,6 @@ export const Avatar = styled.img.attrs(({ src, alt }) => ({
   width: 200px;
   height: 200px;
   border-radius: 50%;
+  outline: 1px solid rgba(250, 250, 250, 0.8);
+  outline-offset: 5px;
 `
