@@ -2,17 +2,18 @@ import { api } from "./api"
 
 interface ISearchUserResponse {
     avatar_url: string
-    bio: string
+    bio: string | null
     blog: string
-    company: string
-    followers: string
+    company: string | null
+    email: string | null
+    followers: number
     followers_url: string
-    following: string
+    following: number
     following_url: string
     html_url: string
-    id: string
-    location: string
-    twitter_username: string
+    id: number
+    location: string | null
+    twitter_username: string | null
 }
 
 export const searchUser = async(username: string): Promise<ISearchUserResponse> => {
