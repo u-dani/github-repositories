@@ -12,14 +12,14 @@ const fontSize: size = {
   sm: '0.875rem',
   base: '1rem',
   lg: '1.125rem',
-  xl: '1.25rem',
+  xl: '1.5rem',
   xxl: 'clamp(1.5rem, 1.5rem + 1vw, 2.25rem)',
 }
 const lineHeight: size = {
   sm: '1.25rem',
   base: '1.5rem',
   lg: '1.75rem',
-  xl: '1.75rem',
+  xl: '2rem',
   xxl: 'clamp(1.75rem, 1.75rem + 1vw, 2.5rem)',
 }
 
