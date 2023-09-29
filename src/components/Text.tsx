@@ -11,7 +11,7 @@ type size = {
 const fontSize: size = {
   sm: '0.875rem',
   base: '1rem',
-  lg: '1.125rem',
+  lg: '1.25rem',
   xl: '1.5rem',
   xxl: 'clamp(1.5rem, 1.5rem + 1vw, 2.25rem)',
 }
