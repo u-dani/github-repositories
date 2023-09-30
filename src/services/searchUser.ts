@@ -13,6 +13,7 @@ export interface ISearchUserResponse {
     html_url: string
     id: number
     location: string | null
+    login: string
     name: string
     twitter_username: string | null
 }
