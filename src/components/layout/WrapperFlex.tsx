@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
 interface IWrapperFlexProps {
-  width?: string
-  maxWidth?: string
-  height?: string
+  alignItems?: 'start' | 'center' | 'end' | 'stretch'
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse'
   gap?: string
+  height?: string
   justifyContent?:
     | 'start'
     | 'center'
@@ -14,22 +13,25 @@ interface IWrapperFlexProps {
     | 'space-around'
     | 'space-evelyn'
     | 'stretch'
-  alignItems?: 'start' | 'center' | 'end' | 'stretch'
-  wrap?: boolean
+  margin?: string
+  maxWidth?: string
   padding?: string
   position?: 'relative'
+  width?: string
+  wrap?: boolean
 }
 
 export const WrapperFlex = styled.div<IWrapperFlexProps>`
-  position: ${({ position }) => position ?? 'static'};
-  width: ${props => props.width ?? '100%'};
-  max-width: ${props => props.maxWidth ?? '100%'};
-  height: ${props => props.height ?? 'auto'};
+  align-items: ${props => props.alignItems ?? 'center'};
   display: flex;
   flex-direction: ${props => props.direction ?? 'row'};
-  gap: ${props => props.gap ?? '0px'};
-  justify-content: ${props => props.justifyContent ?? 'center'};
-  align-items: ${props => props.alignItems ?? 'center'};
   flex-wrap: ${props => (props.wrap ? 'wrap' : 'nowrap')};
+  gap: ${props => props.gap ?? '0px'};
+  height: ${props => props.height ?? 'auto'};
+  justify-content: ${props => props.justifyContent ?? 'center'};
+  margin: ${({ margin }) => (margin ? margin : '0px')};
+  max-width: ${props => props.maxWidth ?? '100%'};
   padding: ${({ padding }) => (padding ? padding : '0px')};
+  position: ${({ position }) => position ?? 'static'};
+  width: ${props => props.width ?? '100%'};
 `
