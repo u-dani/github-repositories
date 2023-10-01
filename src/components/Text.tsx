@@ -27,7 +27,7 @@ interface ITextProps {
   size?: keyof size
   align?: 'start' | 'center' | 'end' | 'justify'
   weight?: 'light' | 'regular' | 'bold'
-  color?: 'blue' | 'gray'
+  color?: 'blue' | 'gray' | 'white'
 }
 
 export const Text = styled.span<ITextProps>`
@@ -48,11 +48,13 @@ export const Text = styled.span<ITextProps>`
   color: ${props => {
     switch (props.color) {
       case 'gray':
-        return '#8b949e'
+        return '#a3aab3'
       case 'blue':
         return '#58a6ff'
-      default:
+      case 'white':
         return 'rgba(255, 255, 255, 0.9)'
+      default:
+        return 'currentColor'
     }
   }};
 `
