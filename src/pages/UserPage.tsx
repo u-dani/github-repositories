@@ -8,18 +8,22 @@ import { UserCard } from '../components/UserCard'
 export const UserPage = () => {
   const { user: username } = useParams()
   const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function requestUser() {
       try {
         if (!username) {
-          throw 'username does not exist'
+          throw 'username does not exist!'
         }
         const data = await searchUser(username)
         setUserData(data)
+
         console.log(data)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     requestUser()
@@ -28,7 +32,17 @@ export const UserPage = () => {
   return (
     <WrapperFlex as='main'>
       <WrapperFlex maxWidth='400px'>
-        {userData ? <UserCard {...userData} /> : <p>Carregando o usuário</p>}
+        {isLoading ? (
+          <span>Carregando</span>
+        ) : (
+          <>
+            {userData ? (
+              <UserCard {...userData} />
+            ) : (
+              <p>Usuário não encontrado</p>
+            )}
+          </>
+        )}
       </WrapperFlex>
     </WrapperFlex>
   )
