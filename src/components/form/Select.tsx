@@ -1,22 +1,26 @@
-import { ChevronDown } from 'lucide-react'
 import styled from 'styled-components'
+import { ChevronDown } from 'lucide-react'
 import { WrapperFlex } from '../layout/WrapperFlex'
 
 export interface ISelectProps {
+  fontSize?: string
+  height?: string
+  options: string[]
   placeholder?: string
   selectedValue?: string
   width?: string
-  height?: string
-  options: string[]
   handleSelect: (selectedTargetValue: string) => void
 }
 
-const SelectStyle = styled.div<{ width?: string; height?: string }>`
+const SelectStyle =
+  styled.div <
+  Pick<ISelectProps, 'height' | 'width' | 'fontSize'>>`
   position: relative;
-  font-size: 1rem;
+  font-size: ${({ fontSize }) => fontSize ?? '1rem'};
   width: ${({ width }) => width ?? '100%'};
 
   .selected-value {
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -93,12 +97,13 @@ const SelectStyle = styled.div<{ width?: string; height?: string }>`
 `
 
 export const Select = ({
-  placeholder,
-  options,
-  handleSelect,
-  width,
+  fontSize,
   height,
+  options,
+  placeholder,
   selectedValue,
+  width,
+  handleSelect,
 }: ISelectProps) => {
   const checkbox = document.querySelector<HTMLInputElement>('#iselect-checkbox')
 
@@ -112,7 +117,7 @@ export const Select = ({
   }
 
   return (
-    <SelectStyle width={width} height={height}>
+    <SelectStyle width={width} height={height} fontSize={fontSize}>
       <input type='checkbox' id='iselect-checkbox' />
 
       <WrapperFlex
