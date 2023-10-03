@@ -12,14 +12,14 @@ export const Button = styled.button<IButtonProps>`
   border: 1px solid #58a6ff;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
   color: rgba(250, 250, 250, 0.9);
-  font-size: ${props => props.fontSize ?? '1rem'};
+  font-size: ${props => props.fontSize ?? '0.9rem'};
   font-weight: 500;
-  height: ${props => props.height ?? '50px'};
+  height: ${props => props.height ?? '40px'};
   letter-spacing: 0.8px;
-  line-height: ${props => props.height ?? '50px'};
+  line-height: ${props => props.height ?? '40px'};
   position: relative;
   transition: all 0.5s;
-  width: ${props => props.width ?? '200px'};
+  width: ${props => props.width ?? '140px'};
 
   &:hover,
   &:active {
