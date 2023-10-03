@@ -42,7 +42,7 @@ function App() {
       setMessageData({
         ...messageData,
         show: true,
-        message: 'A busca precisa ter no mínimo 3 caracteres.',
+        message: 'Campo de busca vazio >:(',
       })
       return
     }
