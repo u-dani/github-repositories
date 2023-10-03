@@ -1,24 +1,12 @@
-import { useState, useRef, SyntheticEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-import { Button } from './components/form/Button'
-import { Input } from './components/form/Input'
+import { useState } from 'react'
 import { WrapperFlex } from './components/layout/WrapperFlex'
 import { Text } from './components/Text'
-import { Select } from './components/form/Select'
-
-import { removeExtraSpacesFromString } from './services/removeExtraSpacesFromString'
 import { Message } from './components/Message'
 import { IMessageProps } from './components/Message'
-
-const options = ['Usuários', 'Repositórios']
+import { SearchForm } from './components/form/SearchForm'
+import { Link } from './components/Link'
 
 function App() {
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(
-    options[0]
-  )
-  const navigate = useNavigate()
-
   const [messageData, setMessageData] = useState<IMessageProps>({
     message: 'Mensagem aqui :D',
     state: 'error',
@@ -29,29 +17,8 @@ function App() {
     timeOut: 3000,
   })
 
-  const searchInputRef = useRef<HTMLInputElement>(null)
-
-  const submitSearch = (e: SyntheticEvent) => {
-    e.preventDefault()
-
-    const searchInputValue = removeExtraSpacesFromString(
-      searchInputRef.current?.value ?? ''
-    )
-
-    if (!searchInputValue) {
-      setMessageData({
-        ...messageData,
-        show: true,
-        message: 'Campo de busca vazio >:(',
-      })
-      return
-    }
-
-    if (selectedValue === 'Usuários') {
-      navigate(`usuario/${searchInputValue}`)
-    } else if (selectedValue === 'Repositórios') {
-      navigate(`repositorios?search=${searchInputValue}`)
-    }
+  const handleErrorForm = (message: string) => {
+    setMessageData({ ...messageData, message: message, show: true })
   }
 
   return (
@@ -69,41 +36,14 @@ function App() {
         Repositórios do Github
       </Text>
 
-      <WrapperFlex
-        gap='40px'
-        direction='column'
-        as='form'
-        onSubmit={submitSearch}>
-        <WrapperFlex gap='8px'>
-          <Select
-            width='130px'
-            height='45px'
-            options={options}
-            selectedValue={selectedValue}
-            handleSelect={value => {
-              setSelectedValue(value)
-            }}
-          />
+      <SearchForm handleError={handleErrorForm} />
 
-          <Input
-            ref={searchInputRef}
-            placeholder={
-              selectedValue === 'Usuários'
-                ? 'Digite o usuário do Github'
-                : 'Digite o nome do repositório'
-            }
-            maxWidth='400px'
-            height='45px'
-            padding='10px 12px'
-            fontSize='1rem'
-            required
-          />
-        </WrapperFlex>
-
-        <Button width='160px' type='submit'>
-          Buscar
-        </Button>
-      </WrapperFlex>
+      <Text size='sm' color='gray'>
+        Projeto feito por{' '}
+        <Link to='https://github.com/u-dani' target='_blank'>
+          u-dani
+        </Link>
+      </Text>
     </WrapperFlex>
   )
 }
