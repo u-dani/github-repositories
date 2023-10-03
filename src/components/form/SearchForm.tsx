@@ -53,9 +53,10 @@ export const SearchForm = ({
       gap='8px'
       as='form'
       onSubmit={submitSearch}
+      width='600px'
       {...WrapperFlexProps}>
       <Select
-        width='130px'
+        width='30%'
         height='45px'
         options={options}
         selectedValue={selectedValue}
@@ -66,13 +67,13 @@ export const SearchForm = ({
       />
 
       <Input
+        width='100%'
         ref={searchInputRef}
         placeholder={
           selectedValue === 'Usuários'
             ? 'Digite o usuário do Github'
             : 'Digite o nome do repositório'
         }
-        maxWidth='400px'
         height='45px'
         padding='10px 12px'
         fontSize='1rem'
