@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 type size = {
+  xs: string
   sm: string
   base: string
   lg: string
@@ -9,6 +10,7 @@ type size = {
 }
 
 const fontSize: size = {
+  xs: '0.75rem',
   sm: '0.875rem',
   base: '1rem',
   lg: '1.125rem',
@@ -16,6 +18,7 @@ const fontSize: size = {
   xxl: 'clamp(1.5rem, 1.5rem + 1vw, 2.25rem)',
 }
 const lineHeight: size = {
+  xs: '1rem',
   sm: '1.25rem',
   base: '1.5rem',
   lg: '1.75rem',
@@ -31,7 +34,7 @@ interface ITextProps {
 }
 
 export const Text = styled.span<ITextProps>`
-  font-size: ${({ size }) => (size ? fontSize[size] : fontSize.base)};
+  font-size: ${({ size }) => (size ? fontSize[size] : 'auto')};
   line-height: ${({ size }) => (size ? lineHeight[size] : lineHeight.base)};
   text-align: ${({ align }) => (align ? align : 'start')};
   font-weight: ${props => {
