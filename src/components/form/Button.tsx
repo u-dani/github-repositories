@@ -2,56 +2,33 @@ import styled from 'styled-components'
 
 interface IButtonProps {
   fontSize?: string
-  width?: string
   height?: string
+  width?: string
 }
 
 export const Button = styled.button<IButtonProps>`
+  background: #58a6ff;
+  border-radius: 4px;
+  border: 1px solid #58a6ff;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  color: rgba(250, 250, 250, 0.9);
   font-size: ${props => props.fontSize ?? '1rem'};
-  letter-spacing: 0.8px;
-  border: none;
-  background: transparent;
-
-  line-height: ${props => props.height ?? '50px'};
+  font-weight: 500;
   height: ${props => props.height ?? '50px'};
+  letter-spacing: 0.8px;
+  line-height: ${props => props.height ?? '50px'};
+  position: relative;
+  transition: all 0.5s;
   width: ${props => props.width ?? '200px'};
 
-  color: rgba(250, 250, 250, 0.9);
-  transition: all 0.5s;
-  position: relative;
+  &:hover,
+  &:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: #58a6ff;
+  }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s;
-    border-radius: 4px;
-  }
-  &:hover::before {
-    opacity: 0;
-    transform: scale(0.5, 0.5);
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    opacity: 0;
-    transition: all 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transform: scale(1.2, 1.2);
-    border-radius: 4px;
-  }
-  &:hover::after {
-    opacity: 1;
-    transform: scale(1, 1);
+  &:active {
+    opacity: 0.5;
   }
 `
