@@ -15,6 +15,7 @@ export interface ISearchUserResponse {
     location: string | null
     login: string
     name: string
+    public_repos: number
     twitter_username: string | null
 }
 
