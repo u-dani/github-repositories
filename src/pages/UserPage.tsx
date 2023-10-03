@@ -1,22 +1,35 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { searchUser } from '../services/searchUser'
+import { WrapperFlex } from '../components/layout/WrapperFlex'
+import { ISearchUserResponse } from '../services/searchUser'
+import { UserCard } from '../components/UserCard'
 
 export const UserPage = () => {
-  const { user } = useParams()
-  const [userData, setUserData] = useState()
+  const { user: username } = useParams()
+  const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
 
   useEffect(() => {
-    async function r() {
-      const data = await searchUser(user ?? '')
-      setUserData(data)
+    async function requestUser() {
+      try {
+        if (!username) {
+          throw 'username does not exist'
+        }
+        const data = await searchUser(username)
+        setUserData(data)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    r()
-  }, [user])
+    requestUser()
+  }, [username])
 
   return (
-    <main>
-      <h1>Página do usuario</h1>
-    </main>
+    <WrapperFlex as='main'>
+      <WrapperFlex maxWidth='400px'>
+        {userData ? <UserCard {...userData} /> : <p>Carregando o usuário</p>}
+      </WrapperFlex>
+    </WrapperFlex>
   )
 }
