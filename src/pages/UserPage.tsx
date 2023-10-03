@@ -71,19 +71,23 @@ export const UserPage = () => {
         )}
       </WrapperFlex>
 
-      <WrapperFlex gap='16px' width='100%' justifyContent='space-between'>
-        <SearchForm
-          WrapperFlexProps={{ width: '100%', maxWidth: '700px' }}
-          InputProps={{ height: '35px', fontSize: '0.875rem' }}
-          SelectProps={{ height: '35px', fontSize: '0.875rem', width: '160px' }}
-        />
-        <ButtonFilter width='100px' height='35px'>
-          <input type='checkbox' name='show-filters' id='ishow-filters' />
-          <ListFilter size={20} strokeWidth={2.5} />
-          <Text weight='bold' size='sm'>
-            Filtros
-          </Text>
-        </ButtonFilter>
+      <WrapperFlex direction='column' style={{ background: '#222' }} gap='16px'>
+        <WrapperFlex gap='16px' width='100%' justifyContent='space-between'>
+          <SearchForm
+            WrapperFlexProps={{ width: '100%', maxWidth: '700px' }}
+            SelectProps={{
+              id: 'search-form',
+              width: '160px',
+            }}
+          />
+          <ButtonFilter width='100px' height='35px'>
+            <input type='checkbox' name='show-filters' id='ishow-filters' />
+            <ListFilter size={20} strokeWidth={2.5} />
+            <Text weight='bold' size='sm'>
+              Filtros
+            </Text>
+          </ButtonFilter>
+        </WrapperFlex>
       </WrapperFlex>
     </WrapperFlex>
   )
