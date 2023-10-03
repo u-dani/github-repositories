@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-interface IWrapperFlexProps {
+export interface IWrapperFlexProps {
   alignItems?: 'start' | 'center' | 'end' | 'stretch'
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse'
   gap?: string

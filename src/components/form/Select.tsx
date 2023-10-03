@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import styled from 'styled-components'
 import { WrapperFlex } from '../layout/WrapperFlex'
 
-interface ISelectProps {
+export interface ISelectProps {
   placeholder?: string
   selectedValue?: string
   width?: string
