@@ -22,6 +22,7 @@ export const Input = styled.input<InputProps>`
   background: transparent;
   border: 2px solid transparent;
   outline: 1px solid rgba(250, 250, 250, 0.4);
+  outline-offset: -1px;
 
   &:focus {
     background: transparent;
