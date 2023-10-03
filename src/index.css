@@ -28,9 +28,6 @@ a {
 body {
   min-height: 100vh;
   background: #191919;
-  background: linear-gradient(90deg, #191919, #333333, #4d4d4d);
-  background-size: 300% 300%;
-  animation: bg 20s infinite alternate;
   display: flex;
   justify-content: center;
 }
@@ -39,16 +36,4 @@ button {
   cursor: pointer;
   outline: none;
   text-align: center;
-}
-
-@keyframes bg {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
