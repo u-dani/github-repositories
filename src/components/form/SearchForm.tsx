@@ -58,7 +58,6 @@ export const SearchForm = ({
       <Select
         id='select-search-form'
         width='30%'
-        height='45px'
         options={options}
         selectedValue={selectedValue}
         handleSelect={value => {
@@ -75,9 +74,6 @@ export const SearchForm = ({
             ? 'Digite o usuário do Github'
             : 'Digite o nome do repositório'
         }
-        height='45px'
-        padding='10px 12px'
-        fontSize='1rem'
         required
         {...InputProps}
       />

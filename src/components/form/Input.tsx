@@ -12,12 +12,12 @@ export interface InputProps {
 export const Input = styled.input<InputProps>`
   border-radius: 4px;
   color: rgba(255, 255, 255, 0.9);
-  font-size: ${props => props.fontSize || '1.2rem'};
+  font-size: ${props => props.fontSize || '0.875rem'};
   outline: none;
   padding: ${props => props.padding ?? '8px 12px'};
   text-align: ${props => props.textAlign || 'start'};
   width: ${props => props.width || '100%'};
-  height: ${props => props.height || 'auto'};
+  height: ${props => props.height || '35px'};
   max-width: ${props => props.maxWidth || 'auto'};
   background: transparent;
   border: 2px solid transparent;

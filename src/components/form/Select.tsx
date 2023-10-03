@@ -26,7 +26,7 @@ const SelectStyle = styled.div<
   Pick<ISelectProps, 'height' | 'width' | 'fontSize'>
 >`
   position: relative;
-  font-size: ${({ fontSize }) => fontSize ?? '1rem'};
+  font-size: ${({ fontSize }) => fontSize ?? '0.875rem'};
   width: ${({ width }) => width ?? '100%'};
 
   .selected-value {
@@ -43,7 +43,7 @@ const SelectStyle = styled.div<
     border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
-    height: ${({ height }) => height ?? 'auto'};
+    height: ${({ height }) => height ?? '35px'};
   }
 
   ${Checkbox}:checked + .container-selected-value {
