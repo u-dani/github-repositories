@@ -46,7 +46,6 @@ export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
           color: rgba(250, 250, 250, 0.9);
           letter-spacing: 0.8px;
           transition: all 0.5s;
-          padding: 4px 12px;
 
           &:hover,
           &:active {
