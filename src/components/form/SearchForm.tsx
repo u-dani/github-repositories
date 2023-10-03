@@ -56,6 +56,7 @@ export const SearchForm = ({
       width='600px'
       {...WrapperFlexProps}>
       <Select
+        id='select-search-form'
         width='30%'
         height='45px'
         options={options}
