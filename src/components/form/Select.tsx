@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { WrapperFlex } from '../layout/WrapperFlex'
 
 export interface ISelectProps {
+  id: string
   fontSize?: string
   height?: string
   options: string[]
@@ -12,9 +13,18 @@ export interface ISelectProps {
   handleSelect: (selectedTargetValue: string) => void
 }
 
-const SelectStyle =
-  styled.div <
-  Pick<ISelectProps, 'height' | 'width' | 'fontSize'>>`
+const Checkbox = styled.input.attrs(() => ({
+  type: 'checkbox',
+}))`
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+`
+
+const SelectStyle = styled.div<
+  Pick<ISelectProps, 'height' | 'width' | 'fontSize'>
+>`
   position: relative;
   font-size: ${({ fontSize }) => fontSize ?? '1rem'};
   width: ${({ width }) => width ?? '100%'};
@@ -36,19 +46,12 @@ const SelectStyle =
     height: ${({ height }) => height ?? 'auto'};
   }
 
-  #iselect-checkbox:checked + .container-selected-value {
+  ${Checkbox}:checked + .container-selected-value {
     border: 1px solid rgba(250, 250, 250, 0.8);
     color: rgba(250, 250, 250, 0.8);
   }
 
-  #iselect-checkbox {
-    all: unset;
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-  }
-
-  #iselect-checkbox:checked ~ .container-options {
+  ${Checkbox}:checked ~ .container-options {
     display: flex;
   }
 
@@ -56,7 +59,7 @@ const SelectStyle =
     transition: 200ms ease-in;
   }
 
-  #iselect-checkbox:checked ~ .container-selected-value > .icon-rotate {
+  ${Checkbox}:checked ~ .container-selected-value > .icon-rotate {
     transform: rotate(180deg);
   }
 
@@ -77,6 +80,7 @@ const SelectStyle =
     background-color: #333;
     margin-top: 4px;
     border-radius: 4px;
+    z-index: 50;
   }
 
   .option {
@@ -97,6 +101,7 @@ const SelectStyle =
 `
 
 export const Select = ({
+  id,
   fontSize,
   height,
   options,
@@ -105,7 +110,7 @@ export const Select = ({
   width,
   handleSelect,
 }: ISelectProps) => {
-  const checkbox = document.querySelector<HTMLInputElement>('#iselect-checkbox')
+  const checkbox = document.querySelector<HTMLInputElement>(`#${id}`)
 
   const handle = (e: React.SyntheticEvent) => {
     checkbox?.click()
@@ -118,7 +123,7 @@ export const Select = ({
 
   return (
     <SelectStyle width={width} height={height} fontSize={fontSize}>
-      <input type='checkbox' id='iselect-checkbox' />
+      <Checkbox id={id} />
 
       <WrapperFlex
         justifyContent='space-between'
