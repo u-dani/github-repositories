@@ -71,17 +71,13 @@ export const UserPage = () => {
         )}
       </WrapperFlex>
 
-      <WrapperFlex
-        gap='16px'
-        width='100%'
-        justifyContent='space-between'
-        style={{ background: '#333' }}>
+      <WrapperFlex gap='16px' width='100%' justifyContent='space-between'>
         <SearchForm
           WrapperFlexProps={{ width: '100%', maxWidth: '700px' }}
-          InputProps={{ height: '40px', fontSize: '0.875rem' }}
-          SelectProps={{ height: '40px', fontSize: '0.875rem', width: '160px' }}
+          InputProps={{ height: '35px', fontSize: '0.875rem' }}
+          SelectProps={{ height: '35px', fontSize: '0.875rem', width: '160px' }}
         />
-        <ButtonFilter width='120px' height='40px'>
+        <ButtonFilter width='100px' height='35px'>
           <input type='checkbox' name='show-filters' id='ishow-filters' />
           <ListFilter size={20} strokeWidth={2.5} />
           <Text weight='bold' size='sm'>
