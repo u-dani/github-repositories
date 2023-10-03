@@ -9,6 +9,8 @@ import { ListFilter } from 'lucide-react'
 import { Button } from '../components/form/Button'
 import { Text } from '../components/Text'
 import styled from 'styled-components'
+import { searchUserRepositories } from '../services/searchUserRepositories'
+import { RepositoryCard } from '../components/RepositoryCard'
 
 const ButtonFilter = styled(Button)`
   display: flex;
@@ -36,14 +38,21 @@ export const UserPage = () => {
   const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
   const [isLoading, setIsLoading] = useState(true)
 
+  const [repos, setRepos] = useState()
+
   useEffect(() => {
-    async function requestUser() {
+    async function request() {
       try {
         if (!username) {
           throw 'username does not exist!'
         }
         const data = await searchUser(username)
         setUserData(data)
+
+        const repos = await searchUserRepositories({ username })
+        console.log('repos ', repos)
+
+        setRepos(repos)
 
         console.log(data)
       } catch (error) {
@@ -52,7 +61,7 @@ export const UserPage = () => {
         setIsLoading(false)
       }
     }
-    requestUser()
+    request()
   }, [username])
 
   return (
@@ -87,6 +96,12 @@ export const UserPage = () => {
               Filtros
             </Text>
           </ButtonFilter>
+        </WrapperFlex>
+
+        <WrapperFlex direction='column' gap='24px'>
+          {repos?.map(data => (
+            <RepositoryCard key={JSON.stringify(data)} {...data} />
+          ))}
         </WrapperFlex>
       </WrapperFlex>
     </WrapperFlex>
