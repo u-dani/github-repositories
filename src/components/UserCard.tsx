@@ -32,8 +32,14 @@ export const Icon = ({ icon: Icon }: { icon: React.ElementType }) => {
 
 export const UserCard = (props: ISearchUserResponse) => {
   return (
-    <WrapperFlex direction='column' alignItems='start' gap='8px'>
-      <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
+    <WrapperFlex
+      direction='column'
+      alignItems='start'
+      gap='8px'
+      style={{ background: 'pink' }}>
+      <WrapperFlex>
+        <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
+      </WrapperFlex>
 
       <div>
         <p>
