@@ -30,6 +30,7 @@ body {
   background: #191919;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
 }
 
 button {
