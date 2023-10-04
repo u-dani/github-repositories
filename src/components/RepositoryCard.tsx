@@ -1,33 +1,54 @@
-import { WrapperFlex } from './layout/WrapperFlex'
-import { ISearchUserRepositories } from '../services/searchUserRepositories'
-import { Text } from './Text'
 import styled from 'styled-components'
-import { Link } from './Link'
 import { GitFork, Star, Scale, ArrowUpRight } from 'lucide-react'
+import { ISearchUserRepositories } from '../services/searchUserRepositories'
+import { Link } from './Link'
+import { Text } from './Text'
+import { WrapperFlex } from './layout/WrapperFlex'
 
-const Circle = styled.div`
-  width: 11px;
-  height: 11px;
+const languageColors: { [key: string]: string } = {
+  'C#': '#178600',
+  'C++': '#f34b7d',
+  'Jupyter Notebook': '#da5b0b',
+  C: '#555555',
+  CSS: '#563d7c',
+  Go: '#00add8',
+  HTML: '#fa7a18',
+  Haskell: '#8e7bce',
+  Java: '#b07219',
+  JavaScript: '#fddf68',
+  PHP: '#4f5d95',
+  Python: '#58a6ff',
+  Ruby: '#701516',
+  SASS: '#ff0d86',
+  SCSS: '#ff0d86',
+  Shell: '#89e051',
+  TypeScript: '#79c0ff',
+}
+
+const Circle = styled.div<{
+  language: keyof typeof languageColors
+}>`
+  background-color: ${({ language }) => languageColors[language] ?? '#333'};
   border-radius: 50%;
-  background-color: #ff5773;
+  height: 11px;
+  width: 11px;
 `
 
 const RepositoryCardStyle = styled(WrapperFlex)`
-  border: 1px solid #333;
   border-radius: 4px;
+  border: 1px solid #333;
   padding: 8px 16px;
-  width: 500px;
 `
 
 export const RepositoryCard = ({
-  name,
   description,
-  html_url,
-  language = 'SCSS',
-  license,
   forks_count,
-  stargazers_count,
   homepage,
+  html_url,
+  language,
+  license,
+  name,
+  stargazers_count,
   topics,
 }: ISearchUserRepositories) => {
   return (
@@ -61,7 +82,7 @@ export const RepositoryCard = ({
             {language && (
               <Text>
                 <WrapperFlex gap='4px'>
-                  <Circle /> {language}
+                  <Circle language={language} /> {language}
                 </WrapperFlex>
               </Text>
             )}
@@ -97,7 +118,7 @@ export const RepositoryCard = ({
 
       {homepage && (
         <WrapperFlex width='min-content' margin='2px 0px 0px 0px'>
-          <Link to={homepage} variant='button'>
+          <Link to={homepage} variant='button' target='_blank'>
             <WrapperFlex padding='6px 8px'>
               <Text weight='bold' size='xs'>
                 DEMO
