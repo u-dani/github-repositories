@@ -1,16 +1,17 @@
+import styled from 'styled-components'
+import { Button } from '../components/form/Button'
+import { ISearchUserResponse } from '../services/searchUser'
+import { ListFilter } from 'lucide-react'
+import { RepositoryCard } from '../components/RepositoryCard'
+import { SearchForm } from '../components/form/SearchForm'
+import { Text } from '../components/Text'
+import { UserCard } from '../components/UserCard'
+import { WrapperFlex } from '../components/layout/WrapperFlex'
+import { searchUser } from '../services/searchUser'
+import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { searchUser } from '../services/searchUser'
-import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { ISearchUserResponse } from '../services/searchUser'
-import { UserCard } from '../components/UserCard'
-import { SearchForm } from '../components/form/SearchForm'
-import { ListFilter } from 'lucide-react'
-import { Button } from '../components/form/Button'
-import { Text } from '../components/Text'
-import styled from 'styled-components'
-import { searchUserRepositories } from '../services/searchUserRepositories'
-import { RepositoryCard } from '../components/RepositoryCard'
+import { ISearchUserRepositories } from '../services/searchUserRepositories'
 
 const ButtonFilter = styled(Button)`
   display: flex;
@@ -33,12 +34,19 @@ const ButtonFilter = styled(Button)`
   }
 `
 
+const WrapperRepositories = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+`
+
 export const UserPage = () => {
   const { user: username } = useParams()
-  const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
   const [isLoading, setIsLoading] = useState(true)
-
-  const [repos, setRepos] = useState()
+  const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
+  const [reposData, setReposData] = useState<
+    ISearchUserRepositories[] | undefined
+  >()
 
   useEffect(() => {
     async function request() {
@@ -50,11 +58,7 @@ export const UserPage = () => {
         setUserData(data)
 
         const repos = await searchUserRepositories({ username })
-        console.log('repos ', repos)
-
-        setRepos(repos)
-
-        console.log(data)
+        setReposData(repos)
       } catch (error) {
         console.log(error)
       } finally {
@@ -80,8 +84,8 @@ export const UserPage = () => {
         )}
       </WrapperFlex>
 
-      <WrapperFlex direction='column' style={{ background: '#222' }} gap='16px'>
-        <WrapperFlex gap='16px' width='100%' justifyContent='space-between'>
+      <WrapperFlex direction='column' gap='16px'>
+        <WrapperFlex gap='16px' justifyContent='space-between'>
           <SearchForm
             WrapperFlexProps={{ width: '100%', maxWidth: '700px' }}
             SelectProps={{
@@ -98,11 +102,11 @@ export const UserPage = () => {
           </ButtonFilter>
         </WrapperFlex>
 
-        <WrapperFlex direction='column' gap='24px'>
-          {repos?.map(data => (
-            <RepositoryCard key={JSON.stringify(data)} {...data} />
+        <WrapperRepositories>
+          {reposData?.map(data => (
+            <RepositoryCard key={data.id} {...data} />
           ))}
-        </WrapperFlex>
+        </WrapperRepositories>
       </WrapperFlex>
     </WrapperFlex>
   )
