@@ -52,82 +52,88 @@ export const RepositoryCard = ({
   topics,
 }: ISearchUserRepositories) => {
   return (
-    <RepositoryCardStyle gap='8px' alignItems='start'>
-      <WrapperFlex direction='column' gap='8px' alignItems='start'>
+    <RepositoryCardStyle
+      direction='column'
+      justifyContent='start'
+      gap='8px'
+      alignItems='start'>
+      <WrapperFlex justifyContent='space-between'>
         <Text color='blue' size='lg'>
           <Link to={html_url} target='_blank'>
             {name}
           </Link>
         </Text>
 
+        {homepage && (
+          <WrapperFlex width='min-content' margin='2px 0px 0px 0px'>
+            <Link to={homepage} variant='button' target='_blank'>
+              <WrapperFlex padding='6px 8px'>
+                <Text weight='bold' size='xs'>
+                  DEMO
+                </Text>
+                <ArrowUpRight size={16} strokeWidth={2.5} />
+              </WrapperFlex>
+            </Link>
+          </WrapperFlex>
+        )}
+      </WrapperFlex>
+
+      <WrapperFlex justifyContent='start' height='100%' alignItems='start'>
         {description && (
           <Text color='gray' size='sm'>
             {description}
           </Text>
         )}
-
-        <WrapperFlex gap='24px' justifyContent='start'>
-          {topics.map(topic => (
-            <Link
-              to={`https://github.com/topics/${topic}`}
-              key={topic}
-              variant='tag'>
-              <Text>{topic}</Text>
-            </Link>
-          ))}
-        </WrapperFlex>
-
-        <Text color='gray' size='xs'>
-          <WrapperFlex justifyContent='start' gap='16px'>
-            {language && (
-              <Text>
-                <WrapperFlex gap='4px'>
-                  <Circle language={language} /> {language}
-                </WrapperFlex>
-              </Text>
-            )}
-
-            {stargazers_count !== 0 && (
-              <Text>
-                <WrapperFlex gap='4px'>
-                  <Star size={15} />
-                  {stargazers_count}
-                </WrapperFlex>
-              </Text>
-            )}
-
-            {forks_count !== 0 && (
-              <Text>
-                <WrapperFlex gap='4px'>
-                  <GitFork size={15} /> {forks_count}
-                </WrapperFlex>
-              </Text>
-            )}
-
-            {license && (
-              <Text>
-                <WrapperFlex gap='4px'>
-                  <Scale size={15} />
-                  {license?.name}
-                </WrapperFlex>
-              </Text>
-            )}
-          </WrapperFlex>
-        </Text>
       </WrapperFlex>
 
-      {homepage && (
-        <WrapperFlex width='min-content' margin='2px 0px 0px 0px'>
-          <Link to={homepage} variant='button' target='_blank'>
-            <WrapperFlex padding='6px 8px'>
-              <Text weight='bold' size='xs'>
-                DEMO
-              </Text>
-              <ArrowUpRight size={16} strokeWidth={2.5} />
-            </WrapperFlex>
+      <WrapperFlex gap='24px' justifyContent='start'>
+        {topics.map(topic => (
+          <Link
+            to={`https://github.com/topics/${topic}`}
+            key={topic}
+            variant='tag'>
+            <Text>{topic}</Text>
           </Link>
+        ))}
+      </WrapperFlex>
+
+      <Text color='gray' size='xs'>
+        <WrapperFlex justifyContent='start' gap='16px'>
+          {language && (
+            <Text>
+              <WrapperFlex gap='4px'>
+                <Circle language={language} /> {language}
+              </WrapperFlex>
+            </Text>
+          )}
+
+          {stargazers_count !== 0 && (
+            <Text>
+              <WrapperFlex gap='4px'>
+                <Star size={15} />
+                {stargazers_count}
+              </WrapperFlex>
+            </Text>
+          )}
+
+          {forks_count !== 0 && (
+            <Text>
+              <WrapperFlex gap='4px'>
+                <GitFork size={15} /> {forks_count}
+              </WrapperFlex>
+            </Text>
+          )}
+
+          {license && (
+            <Text>
+              <WrapperFlex gap='4px'>
+                <Scale size={15} />
+                {license?.name}
+              </WrapperFlex>
+            </Text>
+          )}
         </WrapperFlex>
-      )}
+      </Text>
     </RepositoryCardStyle>
   )
 }
