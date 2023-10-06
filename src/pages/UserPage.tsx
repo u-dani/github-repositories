@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Button } from '../components/form/Button'
+import { ISearchUserRepositories } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { ListFilter } from 'lucide-react'
 import { RepositoryCard } from '../components/RepositoryCard'
@@ -11,7 +12,8 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { ISearchUserRepositories } from '../services/searchUserRepositories'
+import { Input } from '../components/form/Input'
+import { Select } from '../components/form/Select'
 
 const ButtonFilter = styled(Button)`
   display: flex;
@@ -36,17 +38,29 @@ const ButtonFilter = styled(Button)`
 
 const WrapperRepositories = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
 `
 
 export const UserPage = () => {
   const { user: username } = useParams()
   const [isLoading, setIsLoading] = useState(true)
+
   const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
   const [reposData, setReposData] = useState<
     ISearchUserRepositories[] | undefined
   >()
+
+  const [languageSelectedValue, setLanguageSelectedValue] = useState<
+    string | undefined
+  >()
+
+  const filteredLanguages = [
+    ...new Set(reposData?.map(repos => repos.language)),
+  ].filter(lang => lang) as string[]
+
+  filteredLanguages.unshift('Tudo')
 
   useEffect(() => {
     async function request() {
@@ -100,6 +114,24 @@ export const UserPage = () => {
               Filtros
             </Text>
           </ButtonFilter>
+        </WrapperFlex>
+
+        <WrapperFlex style={{ background: '#222' }}>
+          <Input placeholder='Busque por um repositório' />
+
+          {filteredLanguages.length > 1 && (
+            <Select
+              id='select-filter-by-language'
+              placeholder='Linguagem'
+              options={filteredLanguages}
+              selectedValue={languageSelectedValue}
+              handleSelect={lang => {
+                lang === 'Tudo'
+                  ? setLanguageSelectedValue(undefined)
+                  : setLanguageSelectedValue(lang)
+              }}
+            />
+          )}
         </WrapperFlex>
 
         <WrapperRepositories>
