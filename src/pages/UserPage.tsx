@@ -86,7 +86,11 @@ export const UserPage = () => {
             />
             <ButtonFilter width='100px' height='35px'>
               <input type='checkbox' name='show-filters' id='ishow-filters' />
-              <ListFilter size={20} strokeWidth={2.5} />
+              <ListFilter
+                size={20}
+                strokeWidth={2.5}
+                className='button-filter-icon'
+              />
               <Text weight='bold' size='sm'>
                 Filtros
               </Text>
@@ -160,6 +164,14 @@ const ButtonFilter = styled(Button)`
     background-color: transparent;
     background-position: 0 0;
     color: #58a6ff;
+  }
+
+  .button-filter-icon {
+    transition: 400ms;
+  }
+
+  &:has(#ishow-filters:checked) .button-filter-icon {
+    transform: rotate(180deg);
   }
 `
 
