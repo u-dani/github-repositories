@@ -36,7 +36,15 @@ function App() {
         Repositórios do Github
       </Text>
 
-      <SearchForm handleError={handleErrorForm} />
+      <SearchForm
+        handleError={handleErrorForm}
+        InputProps={{ height: '45px', fontSize: '1rem' }}
+        SelectProps={{
+          id: 'select-search-form-app',
+          height: '45px',
+          fontSize: '1rem',
+        }}
+      />
 
       <Text size='sm' color='gray'>
         Projeto feito por{' '}
