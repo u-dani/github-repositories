@@ -28,8 +28,8 @@ export const Pagination = ({ maxPages }: { maxPages?: number }) => {
       </button>
       <button
         onClick={nextPage}
-        disabled={maxPages && page < maxPages ? false : true}>
-        Próxima
+        disabled={!maxPages ? false : maxPages > page ? false : true}>
+        Próximo
       </button>
     </WrapperFlex>
   )
