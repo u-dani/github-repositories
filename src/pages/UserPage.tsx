@@ -3,8 +3,9 @@ import { Button } from '../components/form/Button'
 import { ISearchUserRepositories } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { Input } from '../components/form/Input'
-import { ListFilter } from 'lucide-react'
-import { RepositoryCard } from '../components/RepositoryCard'
+import { ListFilter, X } from 'lucide-react'
+import { Pagination } from '../components/Pagination'
+import { RepositoryContainer } from '../components/RepositoryContainer'
 import { SearchForm } from '../components/form/SearchForm'
 import { Select } from '../components/form/Select'
 import { Text } from '../components/Text'
@@ -13,11 +14,11 @@ import { WrapperFlex } from '../components/layout/WrapperFlex'
 import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { X } from 'lucide-react'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 export const UserPage = () => {
   const { user: username } = useParams()
+  const [, setSearchParams] = useSearchParams()
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -58,7 +59,17 @@ export const UserPage = () => {
     const target = e.target as HTMLInputElement
     const value = target.value.replace(/ /g, '')
     setRepositoryFilterInput(value)
+
+    setSearchParams(params => {
+      params.set('page', '1')
+      return params
+    })
   }
+
+  const reposPerPage = 20
+  const maxPages = filteredRepositories
+    ? Math.ceil(filteredRepositories.length / reposPerPage)
+    : undefined
 
   useEffect(() => {
     async function request() {
@@ -162,6 +173,11 @@ export const UserPage = () => {
                   lang === 'Tudo'
                     ? setLanguageSelectedValue(undefined)
                     : setLanguageSelectedValue(lang)
+
+                  setSearchParams(params => {
+                    params.set('page', '1')
+                    return params
+                  })
                 }}
               />
             )}
@@ -177,11 +193,14 @@ export const UserPage = () => {
           </WrapperFilters>
         </Header>
 
-        <WrapperRepositories>
-          {filteredRepositories?.map(data => (
-            <RepositoryCard key={data.id} {...data} />
-          ))}
-        </WrapperRepositories>
+        {filteredRepositories && (
+          <>
+            <RepositoryContainer repos={filteredRepositories} />
+            {filteredRepositories.length > reposPerPage && (
+              <Pagination maxPages={maxPages} />
+            )}
+          </>
+        )}
       </WrapperFlex>
     </WrapperFlex>
   )
@@ -229,13 +248,6 @@ const ButtonFilter = styled(Button)`
   &:has(#ishow-filters:checked) .button-filter-icon {
     transform: rotate(180deg);
   }
-`
-
-const WrapperRepositories = styled.div`
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
 `
 
 const ButtonTomato = styled(Button)`
