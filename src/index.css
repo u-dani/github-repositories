@@ -28,8 +28,6 @@ a {
 body {
   min-height: 100vh;
   background: #191919;
-  display: flex;
-  justify-content: center;
   overflow-x: hidden;
 }
 
