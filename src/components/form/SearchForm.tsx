@@ -1,9 +1,9 @@
-import { useState, useRef, SyntheticEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Input, InputProps } from './Input'
-import { WrapperFlex, IWrapperFlexProps } from '../layout/WrapperFlex'
 import { Select, ISelectProps } from './Select'
+import { WrapperFlex, IWrapperFlexProps } from '../layout/WrapperFlex'
 import { removeExtraSpacesFromString } from '../../services/removeExtraSpacesFromString'
+import { useNavigate } from 'react-router-dom'
+import { useState, useRef, SyntheticEvent } from 'react'
 
 const options = ['Usuários', 'Repositórios']
 
@@ -15,9 +15,9 @@ interface ISearchFormProps {
 }
 
 export const SearchForm = ({
-  WrapperFlexProps,
-  SelectProps,
   InputProps,
+  SelectProps,
+  WrapperFlexProps,
   handleError = message => {
     console.log(message)
   },
@@ -42,9 +42,9 @@ export const SearchForm = ({
     }
 
     if (selectedValue === 'Usuários') {
-      navigate(`usuario/${searchInputValue}`)
+      return navigate(`/usuario/${searchInputValue}`)
     } else if (selectedValue === 'Repositórios') {
-      navigate(`repositorios?search=${searchInputValue}`)
+      return navigate(`/repositorios?search=${searchInputValue}`)
     }
   }
 
