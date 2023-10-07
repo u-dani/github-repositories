@@ -86,13 +86,15 @@ export const RepositoryCard = ({
         )}
       </WrapperFlex>
 
-      <WrapperFlex gap='24px' justifyContent='start'>
+      <WrapperFlex gap='8px' justifyContent='start' wrap>
         {topics.map(topic => (
           <Link
             to={`https://github.com/topics/${topic}`}
             key={topic}
             variant='tag'>
-            <Text>{topic}</Text>
+            <Text size='sm' weight='bold'>
+              {topic}
+            </Text>
           </Link>
         ))}
       </WrapperFlex>
