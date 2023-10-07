@@ -14,9 +14,11 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { X } from 'lucide-react'
 
 export const UserPage = () => {
   const { user: username } = useParams()
+
   const [isLoading, setIsLoading] = useState(true)
 
   const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
@@ -47,12 +49,16 @@ export const UserPage = () => {
     return repo
   })
 
-  const handleFilterInput = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    setRepositoryFilterInput(target.value)
+  const cleanFilters = () => {
+    setRepositoryFilterInput('')
+    setLanguageSelectedValue(undefined)
   }
 
-  console.log('filtered repos ', filteredRepositories)
+  const handleFilterInput = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const value = target.value.replace(/ /g, '')
+    setRepositoryFilterInput(value)
+  }
 
   useEffect(() => {
     async function request() {
@@ -62,8 +68,6 @@ export const UserPage = () => {
         }
         const userData = await searchUser(username)
         setUserData(userData)
-
-        console.log(userData.public_repos)
 
         const repos = []
 
@@ -143,6 +147,8 @@ export const UserPage = () => {
               placeholder='Busque por um repositório'
               width='100%'
               onInput={handleFilterInput}
+              value={repositoryFilterInput}
+              defaultValue=''
             />
 
             {filteredLanguages.length > 1 && (
@@ -160,11 +166,14 @@ export const UserPage = () => {
               />
             )}
 
-            <Button height='35px' width='200px'>
-              <Text weight='bold' size='sm'>
-                Aplicar Filtros
-              </Text>
-            </Button>
+            <ButtonTomato height='35px' onClick={cleanFilters}>
+              <WrapperFlex gap='4px'>
+                <X size={20} strokeWidth={2.5} />
+                <Text weight='bold' size='sm'>
+                  Limpar
+                </Text>
+              </WrapperFlex>
+            </ButtonTomato>
           </WrapperFilters>
         </Header>
 
@@ -227,4 +236,16 @@ const WrapperRepositories = styled.div`
   gap: 16px;
   grid-template-columns: 1fr 1fr;
   width: 100%;
+`
+
+const ButtonTomato = styled(Button)`
+  background: tomato;
+  border-color: tomato;
+
+  &:hover,
+  &:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: tomato;
+  }
 `
