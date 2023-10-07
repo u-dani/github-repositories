@@ -2,9 +2,11 @@ import styled from 'styled-components'
 import { Button } from '../components/form/Button'
 import { ISearchUserRepositories } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
+import { Input } from '../components/form/Input'
 import { ListFilter } from 'lucide-react'
 import { RepositoryCard } from '../components/RepositoryCard'
 import { SearchForm } from '../components/form/SearchForm'
+import { Select } from '../components/form/Select'
 import { Text } from '../components/Text'
 import { UserCard } from '../components/UserCard'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
@@ -12,8 +14,6 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Input } from '../components/form/Input'
-import { Select } from '../components/form/Select'
 
 export const UserPage = () => {
   const { user: username } = useParams()
@@ -24,6 +24,7 @@ export const UserPage = () => {
     ISearchUserRepositories[] | undefined
   >()
 
+  const [repositoryFilterInput, setRepositoryFilterInput] = useState('')
   const [languageSelectedValue, setLanguageSelectedValue] = useState<
     string | undefined
   >()
@@ -34,17 +35,53 @@ export const UserPage = () => {
 
   filteredLanguages.unshift('Tudo')
 
+  const filteredRepositories = reposData?.filter(repo => {
+    if (!repo.name.includes(repositoryFilterInput)) {
+      return
+    }
+
+    if (languageSelectedValue && languageSelectedValue !== repo.language) {
+      return
+    }
+
+    return repo
+  })
+
+  const handleFilterInput = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    setRepositoryFilterInput(target.value)
+  }
+
+  console.log('filtered repos ', filteredRepositories)
+
   useEffect(() => {
     async function request() {
       try {
         if (!username) {
           throw 'username does not exist!'
         }
-        const data = await searchUser(username)
-        setUserData(data)
+        const userData = await searchUser(username)
+        setUserData(userData)
 
-        const repos = await searchUserRepositories({ username })
-        setReposData(repos)
+        console.log(userData.public_repos)
+
+        const repos = []
+
+        const perPage = 20
+        const numberOfPages = Math.ceil(userData.public_repos / perPage)
+
+        for (let i = 1; i <= numberOfPages; i++) {
+          const reposData = await searchUserRepositories({
+            username,
+            page: i,
+            per_page: 20,
+          })
+          repos.push(reposData)
+        }
+
+        const reposArr = repos.reduce((arr, sub) => arr.concat(sub), [])
+
+        setReposData(reposArr)
       } catch (error) {
         console.log(error)
       } finally {
@@ -55,7 +92,7 @@ export const UserPage = () => {
   }, [username])
 
   return (
-    <WrapperFlex width='100vw' alignItems='start' padding='40px' gap='24px'>
+    <WrapperFlex width='100%' alignItems='start' padding='40px' gap='24px'>
       <WrapperFlex width='360px' style={{ border: '1px solid red' }}>
         {isLoading ? (
           <span>Carregando</span>
@@ -102,7 +139,11 @@ export const UserPage = () => {
             gap='16px'
             justifyContent='start'
             id='oi'>
-            <Input placeholder='Busque por um repositório' width='100%' />
+            <Input
+              placeholder='Busque por um repositório'
+              width='100%'
+              onInput={handleFilterInput}
+            />
 
             {filteredLanguages.length > 1 && (
               <Select
@@ -118,11 +159,17 @@ export const UserPage = () => {
                 }}
               />
             )}
+
+            <Button height='35px' width='200px'>
+              <Text weight='bold' size='sm'>
+                Aplicar Filtros
+              </Text>
+            </Button>
           </WrapperFilters>
         </Header>
 
         <WrapperRepositories>
-          {reposData?.map(data => (
+          {filteredRepositories?.map(data => (
             <RepositoryCard key={data.id} {...data} />
           ))}
         </WrapperRepositories>
