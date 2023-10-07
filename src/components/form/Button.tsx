@@ -20,6 +20,8 @@ export const Button = styled.button<IButtonProps>`
   position: relative;
   transition: all 0.5s;
   width: ${props => props.width ?? '140px'};
+  padding: 0px 6px;
+  min-width: max-content;
 
   &:hover,
   &:active {
