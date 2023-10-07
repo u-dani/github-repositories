@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
 import { Link as LinkRouter } from 'react-router-dom'
-import { WrapperFlex } from './layout/WrapperFlex'
 
 interface ILinkProps {
   to: string
@@ -31,6 +30,10 @@ export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
           padding: 2px 6px;
           border-radius: 10px;
           font-weight: 500;
+
+          .wrapper {
+            display: flex;
+          }
 
           &:hover {
             color: rgba(250, 250, 250, 0.9);
@@ -73,7 +76,7 @@ export const Link = ({
   return (
     <LinkStyle variant={variant}>
       <LinkRouter to={to} target={target} style={{ color: 'currentColor' }}>
-        <WrapperFlex>{children}</WrapperFlex>
+        <span className='wrapper'>{children}</span>
       </LinkRouter>
     </LinkStyle>
   )
