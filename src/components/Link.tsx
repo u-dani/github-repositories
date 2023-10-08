@@ -10,6 +10,7 @@ interface ILinkProps {
 
 export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
   cursor: pointer;
+  width: 100%;
 
   ${props => {
     switch (props.variant) {
