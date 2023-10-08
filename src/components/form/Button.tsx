@@ -23,14 +23,21 @@ export const Button = styled.button<IButtonProps>`
   padding: 0px 6px;
   min-width: max-content;
 
-  &:hover,
-  &:active {
+  &:hover:enabled,
+  &:active:enabled {
     background-color: initial;
     background-position: 0 0;
     color: #58a6ff;
   }
 
-  &:active {
+  &:active:enabled {
     opacity: 0.5;
+  }
+
+  &:disabled {
+    box-shadow: none;
+    background-color: rgb(34, 34, 34, 0.5);
+    border-color: transparent;
+    color: #333;
   }
 `
