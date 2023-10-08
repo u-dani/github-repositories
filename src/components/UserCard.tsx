@@ -110,6 +110,16 @@ export const UserCard = (props: ISearchUserResponse) => {
           )}
         </WrapperFlex>
       </Text>
+
+      <WrapperFlex margin='8px 0px'>
+        <Link to={props.html_url} variant='button' target='_blank'>
+          <WrapperFlex padding='6px 8px' height='35px'>
+            <Text weight='bold' size='sm'>
+              VISITAR
+            </Text>
+          </WrapperFlex>
+        </Link>
+      </WrapperFlex>
     </WrapperFlex>
   )
 }
