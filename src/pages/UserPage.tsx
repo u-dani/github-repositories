@@ -108,7 +108,7 @@ export const UserPage = () => {
 
   return (
     <WrapperFlex width='100%' alignItems='start' padding='40px' gap='24px'>
-      <WrapperFlex width='360px' style={{ border: '1px solid red' }}>
+      <WrapperFlex width='360px'>
         {isLoading ? (
           <span>Carregando</span>
         ) : (
