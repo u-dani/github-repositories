@@ -10,7 +10,6 @@ interface ILinkProps {
 
 export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
   cursor: pointer;
-  width: 100%;
 
   ${props => {
     switch (props.variant) {
@@ -45,6 +44,7 @@ export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
 
       case 'button':
         return css`
+          width: 100%;
           background: #58a6ff;
           border-radius: 4px;
           border: 1px solid #58a6ff;
