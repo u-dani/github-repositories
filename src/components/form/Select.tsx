@@ -79,15 +79,32 @@ const SelectStyle = styled.div<
     flex-direction: column;
     border-radius: 4px;
     z-index: 50;
+    max-height: 300px;
 
     .transparent-separator {
       background-color: transparent;
       height: 4px;
+      min-height: 4px;
     }
 
     .form-options {
       border-radius: 4px;
       background-color: #333;
+      height: 100%;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #222;
+      }
+
+      &::-webkit-scrollbar-thumb:vertical {
+        border-radius: 10px;
+        background-color: #f5f5f5;
+      }
     }
   }
 
@@ -98,10 +115,6 @@ const SelectStyle = styled.div<
     cursor: pointer;
     border: 1px solid transparent;
     border-radius: 4px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
     &:hover {
       background-color: #504e4ec5;
