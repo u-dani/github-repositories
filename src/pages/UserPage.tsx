@@ -3,7 +3,7 @@ import { Button } from '../components/form/Button'
 import { ISearchUserRepositories } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { Input } from '../components/form/Input'
-import { ListFilter, X } from 'lucide-react'
+import { ListFilter, X, HeartCrack } from 'lucide-react'
 import { Pagination } from '../components/Pagination'
 import { RepositoryContainer } from '../components/RepositoryContainer'
 import { SearchForm } from '../components/form/SearchForm'
@@ -15,6 +15,7 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
+import { Loading } from '../components/Loading'
 
 export const UserPage = () => {
   const { user: username } = useParams()
@@ -74,9 +75,12 @@ export const UserPage = () => {
   useEffect(() => {
     async function request() {
       try {
+        setIsLoading(true)
+
         if (!username) {
-          throw 'username does not exist!'
+          throw 'username is empty.'
         }
+
         const userData = await searchUser(username)
         setUserData(userData)
 
@@ -98,25 +102,34 @@ export const UserPage = () => {
 
         setReposData(reposArr)
       } catch (error) {
+        setUserData(undefined)
+        setReposData(undefined)
         console.log(error)
       } finally {
         setIsLoading(false)
       }
     }
     request()
+    console.log('search user and repositories again, ', username)
   }, [username])
 
   return (
-    <WrapperFlex width='100%' alignItems='start' padding='40px' gap='24px'>
+    <WrapperFlex width='100%' alignItems='start' padding='40px' gap='32px'>
       <WrapperFlex width='360px'>
         {isLoading ? (
-          <span>Carregando</span>
+          <WrapperFlex direction='column' gap='4px' height='80vh'>
+            <Loading />
+            <Text>Buscando usuário...</Text>
+          </WrapperFlex>
         ) : (
           <>
             {userData ? (
               <UserCard {...userData} />
             ) : (
-              <p>Usuário não encontrado</p>
+              <WrapperFlex direction='column' gap='4px' height='80vh'>
+                <HeartCrack size={32} style={{ color: 'tomato' }} />
+                <Text>Usuário não encontrado!</Text>
+              </WrapperFlex>
             )}
           </>
         )}
@@ -193,11 +206,15 @@ export const UserPage = () => {
           </WrapperFilters>
         </Header>
 
-        {filteredRepositories && (
+        {!isLoading && (
           <>
-            <RepositoryContainer repos={filteredRepositories} />
-            {filteredRepositories.length > reposPerPage && (
-              <Pagination maxPages={maxPages} />
+            {filteredRepositories && (
+              <>
+                <RepositoryContainer repos={filteredRepositories} />
+                {filteredRepositories.length > reposPerPage && (
+                  <Pagination maxPages={maxPages} />
+                )}
+              </>
             )}
           </>
         )}
