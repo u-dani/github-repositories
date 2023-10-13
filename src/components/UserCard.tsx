@@ -51,28 +51,20 @@ export const UserCard = (props: ISearchUserResponse) => {
       {props?.bio && <Text>{props?.bio}</Text>}
 
       <Text size='sm'>
-        <WrapperFlex
-          justifyContent='start'
-          alignItems='center'
-          gap='6px'
-          margin='8px 0px 16px 0px'>
+        <WrapperFlex justifyContent='start' gap='6px' margin='8px 0px 16px 0px'>
           <Icon icon={Users2} />
-          <Link to='https://localhost:5173/usuario/fire?tab=seguidores'>
-            <Text weight='bold' size='sm'>
-              {props.followers}
-            </Text>{' '}
-            <Text size='sm' color='gray'>
-              seguidores
-            </Text>
+          <Link
+            to={`https://github.com/${props.login}?tab=followers`}
+            target='_blank'>
+            <Text weight='bold'>{props.followers}</Text>{' '}
+            <Text color='gray'>seguidores</Text>
           </Link>
           <Text> · </Text>
-          <Link to='https://localhost:5173/usuario/fire?tab=seguindo'>
-            <Text size='sm' weight='bold'>
-              {props.following}
-            </Text>{' '}
-            <Text size='sm' color='gray'>
-              seguindo
-            </Text>
+          <Link
+            to={`https://github.com/${props.login}?tab=following`}
+            target='_blank'>
+            <Text weight='bold'>{props.following}</Text>{' '}
+            <Text color='gray'>seguindo</Text>
           </Link>
         </WrapperFlex>
 
