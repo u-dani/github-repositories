@@ -4,6 +4,7 @@ import { ISearchUserRepositories } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { Input } from '../components/form/Input'
 import { ListFilter, X, HeartCrack } from 'lucide-react'
+import { Loading } from '../components/Loading'
 import { Pagination } from '../components/Pagination'
 import { RepositoryContainer } from '../components/RepositoryContainer'
 import { SearchForm } from '../components/form/SearchForm'
@@ -15,7 +16,6 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { Loading } from '../components/Loading'
 
 export const UserPage = () => {
   const { user: username } = useParams()
@@ -110,7 +110,6 @@ export const UserPage = () => {
       }
     }
     request()
-    console.log('search user and repositories again, ', username)
   }, [username])
 
   return (
