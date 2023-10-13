@@ -77,13 +77,22 @@ const SelectStyle = styled.div<
     min-width: max-content;
     width: 100%;
     flex-direction: column;
-    background-color: #333;
-    margin-top: 4px;
     border-radius: 4px;
     z-index: 50;
+
+    .transparent-separator {
+      background-color: transparent;
+      height: 4px;
+    }
+
+    .form-options {
+      border-radius: 4px;
+      background-color: #333;
+    }
   }
 
   .option {
+    width: 100%;
     background-color: #333;
     padding: 8px 12px;
     cursor: pointer;
@@ -113,16 +122,28 @@ export const Select = ({
   const checkbox = document.querySelector<HTMLInputElement>(`#${id}`)
 
   const handle = (e: React.SyntheticEvent) => {
-    checkbox?.click()
     const target = e.target as HTMLInputElement
     const selectedTargetValue = target.getAttribute('data-option')
+
     if (selectedTargetValue) {
       handleSelect(selectedTargetValue)
+    }
+
+    if (checkbox) {
+      checkbox.checked = false
     }
   }
 
   return (
-    <SelectStyle width={width} height={height} fontSize={fontSize}>
+    <SelectStyle
+      width={width}
+      height={height}
+      fontSize={fontSize}
+      onMouseLeave={() => {
+        if (checkbox) {
+          checkbox.checked = false
+        }
+      }}>
       <Checkbox id={id} />
 
       <WrapperFlex
@@ -135,20 +156,28 @@ export const Select = ({
         <ChevronDown className='icon-rotate' />
       </WrapperFlex>
 
-      <form className='container-options' onChange={handle}>
-        {options.map(option => (
-          <label htmlFor={option} className='option' key={option}>
-            <input
-              type='radio'
-              name='options'
-              id={option}
-              data-option={option}
-              defaultChecked={selectedValue === option}
-            />
-            <span>{option}</span>
-          </label>
-        ))}
-      </form>
+      <div className='container-options'>
+        <div className='transparent-separator'></div>
+        <WrapperFlex
+          as='form'
+          className='form-options'
+          onChange={handle}
+          direction='column'
+          alignItems='start'>
+          {options.map(option => (
+            <label htmlFor={option} className='option' key={option}>
+              <input
+                type='radio'
+                name='options'
+                id={option}
+                data-option={option}
+                defaultChecked={selectedValue === option}
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+        </WrapperFlex>
+      </div>
     </SelectStyle>
   )
 }
