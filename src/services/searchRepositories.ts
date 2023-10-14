@@ -1,6 +1,6 @@
 import { api } from "./api"
 
-interface ISearchRepositoriesProps {
+export interface ISearchRepositoriesProps {
     language?: string
     license?: 'BSD Zero Clause License' | 'MIT License' | 'Apache License 2.0' | 'Creative Commons' | 'GNU General Public License'
     numberOfForks?: string
@@ -11,7 +11,7 @@ interface ISearchRepositoriesProps {
     topic?: string[]
 }
 
-export const searchRepositories = async ({page = 1, per_page = 10, ...props}: ISearchRepositoriesProps) => {
+export const searchRepositories = async ({page = 1, per_page = 20, ...props}: ISearchRepositoriesProps) => {
     let licenseAbbr;
 
     if (props.license) {    
@@ -44,7 +44,6 @@ export const searchRepositories = async ({page = 1, per_page = 10, ...props}: IS
     const topic = props.topic ? props.topic.reduce((acc, cv) => acc + `+topic%3A${cv}` , '') : ''
 
     const searchParams = `q=${props.query}${language}${license}${forks}${stars}${topic}&page=${page}&per_page=${per_page}`
-    console.log(searchParams)
 
     const { data } = await api.get(`/search/repositories?${searchParams}`)
     return data
