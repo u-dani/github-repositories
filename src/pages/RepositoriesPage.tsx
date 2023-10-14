@@ -13,6 +13,7 @@ import { useSearchParams } from 'react-router-dom'
 import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
 import { RepositoryContainer } from '../components/RepositoryContainer'
 import { Pagination } from '../components/Pagination'
+import { SearchForm } from '../components/form/SearchForm'
 
 const languages = [
   'JavaScript',
@@ -74,7 +75,7 @@ export const RepositoriesPage = () => {
     async function request() {
       try {
         setIsLoading(true)
-        const repos = await searchRepositories({ ...filters, page })
+        const repos = await searchRepositories({ ...filters, query, page })
         setReposData(repos)
       } catch (err) {
         setReposData(undefined)
@@ -85,7 +86,7 @@ export const RepositoriesPage = () => {
     }
 
     request()
-  }, [filters, page])
+  }, [filters, page, query])
 
   return (
     <WrapperFlex
@@ -164,11 +165,17 @@ export const RepositoriesPage = () => {
         </WrapperFlex>
       </WrapperFlex>
 
-      <WrapperFlex direction='column' gap='16px'>
+      <WrapperFlex direction='column' alignItems='start' gap='16px'>
+        <SearchForm
+          WrapperFlexProps={{ width: '100%' }}
+          SelectProps={{ id: 'search-form-repositories-page', width: '200px' }}
+        />
+
         {isLoading ? (
           <span>Buscando repositórios</span>
         ) : (
           <>
+            <Text>{reposData?.total_count} resultados</Text>
             <RepositoryContainer repos={reposData?.items} />
             {maxPages > 1 && <Pagination maxPages={maxPages} />}
           </>
