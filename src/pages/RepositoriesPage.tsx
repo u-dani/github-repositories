@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X } from 'lucide-react'
-import { useState } from 'react'
+import { X, PlusCircle } from 'lucide-react'
+import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
+import { useState, useRef } from 'react'
 
 const languages = [
   'JavaScript',
@@ -22,11 +23,24 @@ interface IFilters {
 export const RepositoriesPage = () => {
   const [filters, setFilters] = useState<IFilters>({ language: undefined })
 
-  console.log(filters)
+  const languageInputRef = useRef<HTMLInputElement>(null)
 
   const handleFilterByLanguage = (e: React.SyntheticEvent) => {
     const target = e.target as HTMLInputElement
     const language = target.getAttribute('data-language')
+
+    if (language) {
+      setFilters({ ...filters, language })
+    }
+  }
+
+  const handleSubmitLanguageForm = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+    const language = removeExtraSpacesFromString(
+      languageInputRef.current?.value ?? ''
+    )
+
+    console.log('lang ', language)
 
     if (language) {
       setFilters({ ...filters, language })
@@ -53,10 +67,7 @@ export const RepositoriesPage = () => {
             Linguagens
           </Text>
 
-          <WrapperFlex
-            direction='column'
-            as='form'
-            onChange={handleFilterByLanguage}>
+          <WrapperFlex direction='column' onChange={handleFilterByLanguage}>
             {filters.language ? (
               <ListItem>
                 <WrapperFlex>
@@ -88,16 +99,56 @@ export const RepositoriesPage = () => {
                     </WrapperFlex>
                   </ListItem>
                 ))}
+
+                <ListItem>
+                  <WrapperFlex
+                    gap='8px'
+                    justifyContent='start'
+                    as='form'
+                    onSubmit={handleSubmitLanguageForm}>
+                    <button type='submit' style={{ all: 'unset' }}>
+                      <WrapperFlex>
+                        <PlusCircle size={20} />
+                      </WrapperFlex>
+                    </button>
+                    <Input
+                      type='text'
+                      placeholder='Mais linguagens'
+                      ref={languageInputRef}
+                    />
+                  </WrapperFlex>
+                </ListItem>
               </>
             )}
           </WrapperFlex>
         </WrapperFlex>
       </WrapperFlex>
 
-      <WrapperFlex></WrapperFlex>
+      <WrapperFlex>filtros {filters?.language}</WrapperFlex>
     </WrapperFlex>
   )
 }
+
+const Input = styled.input`
+  background: transparent;
+  font-size: 0.9rem;
+  padding: 4px 0px;
+  border: 1px solid transparent;
+  outline: none;
+  color: #ddd;
+
+  &::placeholder {
+    color: #ddd;
+  }
+
+  &:focus {
+    border-bottom-color: #ddd;
+
+    &::placeholder {
+      color: transparent;
+    }
+  }
+`
 
 const ListItem = styled.span`
   width: 100%;
