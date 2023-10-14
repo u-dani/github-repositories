@@ -1,6 +1,6 @@
 import { api } from "./api"
 
-export interface ISearchUserRepositories {
+export interface ISearchUserRepositoriesResponse {
     description: string
     homepage: string
     html_url: string
@@ -19,7 +19,7 @@ interface ISearchUserProps {
     per_page?: number
 }
 
-export const searchUserRepositories = async ({username, page, per_page}: ISearchUserProps): Promise<ISearchUserRepositories[]> => {
+export const searchUserRepositories = async ({username, page, per_page}: ISearchUserProps): Promise<ISearchUserRepositoriesResponse[]> => {
     const { data } = await api.get(`/users/${username}/repos?page=${page ?? 1}&per_page=${per_page ?? 15}`)
     return data
 }
