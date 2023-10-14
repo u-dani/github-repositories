@@ -4,7 +4,13 @@ import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
 import { X, PlusCircle } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import {
+  searchRepositories,
+  ISearchRepositoriesProps,
+} from '../services/searchRepositories'
+import { useSearchParams } from 'react-router-dom'
+import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
 
 const languages = [
   'JavaScript',
@@ -16,12 +22,20 @@ const languages = [
   'HTML',
 ]
 
-interface IFilters {
-  language: string | undefined
+interface IReposData {
+  total_count: number
+  items: ISearchUserRepositoriesResponse[]
 }
 
 export const RepositoriesPage = () => {
-  const [filters, setFilters] = useState<IFilters>({ language: undefined })
+  const [searchParams] = useSearchParams()
+  const query = searchParams.get('search') ?? ''
+
+  const [filters, setFilters] = useState<ISearchRepositoriesProps>({
+    query,
+  })
+
+  const [reposData, setReposData] = useState<IReposData | undefined>()
 
   const languageInputRef = useRef<HTMLInputElement>(null)
 
@@ -40,12 +54,23 @@ export const RepositoriesPage = () => {
       languageInputRef.current?.value ?? ''
     )
 
-    console.log('lang ', language)
-
     if (language) {
       setFilters({ ...filters, language })
     }
   }
+
+  useEffect(() => {
+    async function request() {
+      try {
+        const repos = await searchRepositories(filters)
+        setReposData(repos)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    request()
+  }, [filters])
 
   return (
     <WrapperFlex
@@ -124,7 +149,7 @@ export const RepositoriesPage = () => {
         </WrapperFlex>
       </WrapperFlex>
 
-      <WrapperFlex>filtros {filters?.language}</WrapperFlex>
+      <WrapperFlex></WrapperFlex>
     </WrapperFlex>
   )
 }
