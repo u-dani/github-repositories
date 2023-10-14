@@ -14,6 +14,7 @@ import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositor
 import { RepositoryContainer } from '../components/RepositoryContainer'
 import { Pagination } from '../components/Pagination'
 import { SearchForm } from '../components/form/SearchForm'
+import { useNavigate } from 'react-router-dom'
 
 const languages = [
   'JavaScript',
@@ -31,16 +32,16 @@ interface IReposData {
 }
 
 export const RepositoriesPage = () => {
-  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('search') ?? ''
   const page = Number(searchParams.get('page')) ?? 1
-
-  console.log(page)
 
   const [isLoading, setIsLoading] = useState(true)
   const [reposData, setReposData] = useState<IReposData | undefined>()
   const [filters, setFilters] = useState<ISearchRepositoriesProps>({
     query,
+    page,
     per_page: 20,
   })
 
@@ -51,6 +52,13 @@ export const RepositoriesPage = () => {
 
   const languageInputRef = useRef<HTMLInputElement>(null)
 
+  const resetPageParameter = () => {
+    setSearchParams(params => {
+      params.set('page', '1')
+      return params
+    })
+  }
+
   const handleFilterByLanguage = (e: React.SyntheticEvent) => {
     const target = e.target as HTMLInputElement
     const language = target.getAttribute('data-language')
@@ -58,6 +66,8 @@ export const RepositoriesPage = () => {
     if (language) {
       setFilters({ ...filters, language })
     }
+
+    resetPageParameter()
   }
 
   const handleSubmitLanguageForm = (e: React.SyntheticEvent) => {
@@ -69,9 +79,35 @@ export const RepositoriesPage = () => {
     if (language) {
       setFilters({ ...filters, language })
     }
+
+    resetPageParameter()
+  }
+
+  const formatNumber = (number: number) => {
+    if (number < 1000) {
+      return number
+    }
+
+    if (number < 1000000) {
+      const div = number / 1000
+      const integer = Math.floor(div)
+      const decimal = Number((div - integer).toFixed(1))
+      const format = integer + decimal + 'K'
+      return format
+    }
+
+    const div = number / 1000000
+    const integer = Math.floor(div)
+    const decimal = Number((div - integer).toFixed(1))
+    const format = integer + decimal + 'M'
+    return format
   }
 
   useEffect(() => {
+    if (!query) {
+      return navigate(`/`)
+    }
+
     async function request() {
       try {
         setIsLoading(true)
@@ -121,6 +157,7 @@ export const RepositoriesPage = () => {
                     className='close-icon'
                     onClick={() => {
                       setFilters({ ...filters, language: undefined })
+                      resetPageParameter()
                     }}
                   />
                 </WrapperFlex>
@@ -175,7 +212,9 @@ export const RepositoriesPage = () => {
           <span>Buscando repositórios</span>
         ) : (
           <>
-            <Text>{reposData?.total_count} resultados</Text>
+            <Text weight='bold'>
+              {formatNumber(reposData?.total_count ?? 0)} resultados de {query}
+            </Text>
             <RepositoryContainer repos={reposData?.items} />
             {maxPages > 1 && <Pagination maxPages={maxPages} />}
           </>
