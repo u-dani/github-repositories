@@ -15,6 +15,7 @@ import { RepositoryContainer } from '../components/RepositoryContainer'
 import { Pagination } from '../components/Pagination'
 import { SearchForm } from '../components/form/SearchForm'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from '../components/Loading'
 
 const languages = [
   'JavaScript',
@@ -122,6 +123,7 @@ export const RepositoriesPage = () => {
     }
 
     request()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, page, query])
 
   return (
@@ -209,7 +211,10 @@ export const RepositoriesPage = () => {
         />
 
         {isLoading ? (
-          <span>Buscando repositórios</span>
+          <WrapperFlex direction='column' gap='4px' height='80vh'>
+            <Loading />
+            <Text>Buscando repositórios...</Text>
+          </WrapperFlex>
         ) : (
           <>
             <Text weight='bold'>
