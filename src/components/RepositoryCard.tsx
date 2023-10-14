@@ -25,13 +25,14 @@ const languageColors: { [key: string]: string } = {
   TypeScript: '#79c0ff',
 }
 
-const Circle = styled.div<{
+export const Circle = styled.div<{
   language: keyof typeof languageColors
+  width?: string
 }>`
-  background-color: ${({ language }) => languageColors[language] ?? '#333'};
+  background-color: ${({ language }) => languageColors[language] ?? '#f5f5f5'};
   border-radius: 50%;
-  height: 11px;
-  width: 11px;
+  height: ${({ width }) => width ?? '11px'};
+  width: ${({ width }) => width ?? '11px'};
 `
 
 const RepositoryCardStyle = styled(WrapperFlex)`
