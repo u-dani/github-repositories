@@ -11,6 +11,8 @@ import {
 } from '../services/searchRepositories'
 import { useSearchParams } from 'react-router-dom'
 import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
+import { RepositoryContainer } from '../components/RepositoryContainer'
+import { Pagination } from '../components/Pagination'
 
 const languages = [
   'JavaScript',
@@ -30,12 +32,21 @@ interface IReposData {
 export const RepositoriesPage = () => {
   const [searchParams] = useSearchParams()
   const query = searchParams.get('search') ?? ''
+  const page = Number(searchParams.get('page')) ?? 1
 
+  console.log(page)
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [reposData, setReposData] = useState<IReposData | undefined>()
   const [filters, setFilters] = useState<ISearchRepositoriesProps>({
     query,
+    per_page: 20,
   })
 
-  const [reposData, setReposData] = useState<IReposData | undefined>()
+  const maxPages =
+    reposData?.total_count && filters.per_page
+      ? Math.ceil(reposData.total_count / filters.per_page)
+      : 1
 
   const languageInputRef = useRef<HTMLInputElement>(null)
 
@@ -62,15 +73,19 @@ export const RepositoriesPage = () => {
   useEffect(() => {
     async function request() {
       try {
-        const repos = await searchRepositories(filters)
+        setIsLoading(true)
+        const repos = await searchRepositories({ ...filters, page })
         setReposData(repos)
       } catch (err) {
+        setReposData(undefined)
         console.log(err)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     request()
-  }, [filters])
+  }, [filters, page])
 
   return (
     <WrapperFlex
@@ -149,7 +164,16 @@ export const RepositoriesPage = () => {
         </WrapperFlex>
       </WrapperFlex>
 
-      <WrapperFlex></WrapperFlex>
+      <WrapperFlex direction='column' gap='16px'>
+        {isLoading ? (
+          <span>Buscando repositórios</span>
+        ) : (
+          <>
+            <RepositoryContainer repos={reposData?.items} />
+            {maxPages > 1 && <Pagination maxPages={maxPages} />}
+          </>
+        )}
+      </WrapperFlex>
     </WrapperFlex>
   )
 }
