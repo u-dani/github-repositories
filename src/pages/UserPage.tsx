@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Button } from '../components/form/Button'
-import { ISearchUserRepositories } from '../services/searchUserRepositories'
+import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { Input } from '../components/form/Input'
 import { ListFilter, X, HeartCrack } from 'lucide-react'
@@ -19,13 +19,13 @@ import { useParams, useSearchParams } from 'react-router-dom'
 
 export const UserPage = () => {
   const { user: username } = useParams()
-  const [, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [isLoading, setIsLoading] = useState(true)
 
   const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
   const [reposData, setReposData] = useState<
-    ISearchUserRepositories[] | undefined
+    ISearchUserRepositoriesResponse[] | undefined
   >()
 
   const [repositoryFilterInput, setRepositoryFilterInput] = useState('')
@@ -51,6 +51,21 @@ export const UserPage = () => {
     return repo
   })
 
+  const reposPerPage = 20
+  const page = Number(searchParams.get('page')) || 1
+
+  let repositoryArraySlice = filteredRepositories?.slice(
+    reposPerPage * (page - 1),
+    reposPerPage * page
+  )
+
+  repositoryArraySlice =
+    repositoryArraySlice?.length === 0 ? undefined : repositoryArraySlice
+
+  const maxPages = filteredRepositories
+    ? Math.ceil(filteredRepositories.length / reposPerPage)
+    : 1
+
   const cleanFilters = () => {
     setRepositoryFilterInput('')
     setLanguageSelectedValue(undefined)
@@ -66,11 +81,6 @@ export const UserPage = () => {
       return params
     })
   }
-
-  const reposPerPage = 20
-  const maxPages = filteredRepositories
-    ? Math.ceil(filteredRepositories.length / reposPerPage)
-    : undefined
 
   useEffect(() => {
     async function request() {
@@ -207,14 +217,8 @@ export const UserPage = () => {
 
         {!isLoading && (
           <>
-            {filteredRepositories && (
-              <>
-                <RepositoryContainer repos={filteredRepositories} />
-                {filteredRepositories.length > reposPerPage && (
-                  <Pagination maxPages={maxPages} />
-                )}
-              </>
-            )}
+            <RepositoryContainer repos={repositoryArraySlice} />
+            {maxPages > 1 && <Pagination maxPages={maxPages} />}
           </>
         )}
       </WrapperFlex>
