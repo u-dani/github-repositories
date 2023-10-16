@@ -71,36 +71,29 @@ export const RepositoriesPage = () => {
     const target = event.target as HTMLInputElement
     const data = target.getAttribute(`data-${dataAttr}`)
 
-    const obj = { [filtersKey]: data }
-
     if (data) {
+      const obj = { [filtersKey]: data }
       setFilters(state => ({ ...state, ...obj }))
     }
 
     resetPageParameter()
   }
 
-  const handleSubmitLanguageForm = (e: React.SyntheticEvent) => {
-    e.preventDefault()
-    const language = removeExtraSpacesFromString(
-      languageInputRef.current?.value ?? ''
-    )
+  const handleSubmitFilter = ({
+    event,
+    ref,
+    filtersKey,
+  }: {
+    event: React.SyntheticEvent
+    ref: React.RefObject<HTMLInputElement>
+    filtersKey: keyof typeof filters
+  }) => {
+    event.preventDefault()
+    const valueRef = removeExtraSpacesFromString(ref.current?.value ?? '')
 
-    if (language) {
-      setFilters({ ...filters, language })
-    }
-
-    resetPageParameter()
-  }
-
-  const handleSubmitForksForm = (e: React.SyntheticEvent) => {
-    e.preventDefault()
-    const numberOfForks = removeExtraSpacesFromString(
-      forksInputRef.current?.value ?? ''
-    )
-
-    if (numberOfForks) {
-      setFilters({ ...filters, numberOfForks })
+    if (valueRef) {
+      const obj = { [filtersKey]: valueRef }
+      setFilters(state => ({ ...state, ...obj }))
     }
 
     resetPageParameter()
@@ -216,7 +209,13 @@ export const RepositoriesPage = () => {
                     gap='8px'
                     justifyContent='start'
                     as='form'
-                    onSubmit={handleSubmitLanguageForm}>
+                    onSubmit={e => {
+                      handleSubmitFilter({
+                        event: e,
+                        ref: languageInputRef,
+                        filtersKey: 'language',
+                      })
+                    }}>
                     <button type='submit' style={{ all: 'unset' }}>
                       <WrapperFlex>
                         <PlusCircle size={20} />
@@ -324,7 +323,13 @@ export const RepositoriesPage = () => {
                     gap='8px'
                     justifyContent='start'
                     as='form'
-                    onSubmit={handleSubmitForksForm}>
+                    onSubmit={e => {
+                      handleSubmitFilter({
+                        event: e,
+                        ref: forksInputRef,
+                        filtersKey: 'numberOfForks',
+                      })
+                    }}>
                     <button
                       type='submit'
                       style={{ all: 'unset' }}
