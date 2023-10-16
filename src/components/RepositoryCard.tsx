@@ -6,31 +6,32 @@ import { Text } from './Text'
 import { WrapperFlex } from './layout/WrapperFlex'
 
 const languageColors: { [key: string]: string } = {
-  'C#': '#178600',
-  'C++': '#f34b7d',
-  'Jupyter Notebook': '#da5b0b',
-  C: '#555555',
-  CSS: '#563d7c',
-  Go: '#00add8',
-  HTML: '#fa7a18',
-  Haskell: '#8e7bce',
-  Java: '#b07219',
-  JavaScript: '#fddf68',
-  PHP: '#4f5d95',
-  Python: '#58a6ff',
-  Ruby: '#701516',
-  Sass: '#ff0d86',
-  Scss: '#ff0d86',
-  Shell: '#89e051',
-  TypeScript: '#79c0ff',
-  GDScript: '#379bf3',
+  'c#': '#178600',
+  'c++': '#f34b7d',
+  'jupyter notebook': '#da5b0b',
+  c: '#555555',
+  css: '#563d7c',
+  go: '#00add8',
+  html: '#fa7a18',
+  haskell: '#8e7bce',
+  java: '#b07219',
+  javaScript: '#fddf68',
+  php: '#4f5d95',
+  python: '#58a6ff',
+  ruby: '#701516',
+  sass: '#ff0d86',
+  scss: '#ff0d86',
+  shell: '#89e051',
+  typeScript: '#79c0ff',
+  gscript: '#379bf3',
 }
 
 export const Circle = styled.div<{
   language: keyof typeof languageColors
   width?: string
 }>`
-  background-color: ${({ language }) => languageColors[language] ?? '#f5f5f5'};
+  background-color: ${({ language }) =>
+    languageColors[language.toString().toLowerCase()] ?? '#f5f5f5'};
   border-radius: 50%;
   height: ${({ width }) => width ?? '11px'};
   width: ${({ width }) => width ?? '11px'};
