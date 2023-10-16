@@ -168,8 +168,7 @@ export const RepositoriesPage = () => {
       gap='32px'
       style={{ color: '#dddddd' }}>
       <WrapperFlex
-        // style={{ border: '1px solid red' }}
-        width='260px'
+        width='300px'
         direction='column'
         alignItems='start'
         gap='16px'>
@@ -562,7 +561,6 @@ export const RepositoriesPage = () => {
 const Separator = styled.span`
   width: 100%;
   border-top: 1px solid #333;
-  margin: 2px 0px;
 `
 
 const Tag = styled(LinkStyle).attrs(() => ({
