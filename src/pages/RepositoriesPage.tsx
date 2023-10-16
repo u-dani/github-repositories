@@ -2,12 +2,13 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, PlusCircle } from 'lucide-react'
+import { X, PlusCircle, Scale } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
 import { useState, useRef, useEffect } from 'react'
 import {
   searchRepositories,
   ISearchRepositoriesProps,
+  licenses,
 } from '../services/searchRepositories'
 import { useSearchParams } from 'react-router-dom'
 import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
@@ -31,6 +32,8 @@ interface IReposData {
   total_count: number
   items: ISearchUserRepositoriesResponse[]
 }
+
+const licensesKeys = Object.keys(licenses)
 
 export const RepositoriesPage = () => {
   const navigate = useNavigate()
@@ -79,6 +82,17 @@ export const RepositoriesPage = () => {
 
     if (language) {
       setFilters({ ...filters, language })
+    }
+
+    resetPageParameter()
+  }
+
+  const handleFilterByLicense = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const license = target.getAttribute('data-license')
+
+    if (license) {
+      setFilters({ ...filters, license })
     }
 
     resetPageParameter()
@@ -202,8 +216,51 @@ export const RepositoriesPage = () => {
             )}
           </WrapperFlex>
         </WrapperFlex>
+
+        <WrapperFlex direction='column' alignItems='start' gap='4px'>
+          <Text size='sm' weight='bold' color='gray'>
+            Licenças
+          </Text>
+
+          <WrapperFlex direction='column' onChange={handleFilterByLicense}>
+            {filters.license ? (
+              <ListItem>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <Scale size={20} />
+                    <Text size='sm'>{filters.license}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      setFilters({ ...filters, license: undefined })
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            ) : (
+              <>
+                {licensesKeys.map(license => (
+                  <ListItem>
+                    <WrapperFlex gap='8px' justifyContent='start'>
+                      <input
+                        type='radio'
+                        name='filter-license'
+                        data-license={license}
+                      />
+                      <Text size='sm'>{license}</Text>
+                    </WrapperFlex>
+                  </ListItem>
+                ))}
+              </>
+            )}
+          </WrapperFlex>
+        </WrapperFlex>
       </WrapperFlex>
 
+      {/* repos section */}
       <WrapperFlex direction='column' alignItems='start' gap='16px'>
         <SearchForm
           WrapperFlexProps={{ width: '100%' }}
