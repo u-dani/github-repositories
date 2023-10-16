@@ -2,7 +2,7 @@ import { api } from "./api"
 
 type licensesKeys = 'BSD Zero Clause License' | 'MIT License' | 'Apache License 2.0' | 'Creative Commons' | 'GNU General Public License'
 
-export const licenses: { [key in licensesKeys]: {parameter: string} } = {
+export const licenses: { [key in licensesKeys | string]: {parameter: string} } = {
     'BSD Zero Clause License': {parameter: '0bsd'},
     "MIT License": {parameter: 'mit'},
     "Apache License 2.0": {parameter: 'apache-2.0'},
@@ -12,7 +12,7 @@ export const licenses: { [key in licensesKeys]: {parameter: string} } = {
 
 export interface ISearchRepositoriesProps {
     language?: string
-    license?: licensesKeys
+    license?: licensesKeys | string
     numberOfForks?: string
     numberOfStars?: string
     page?: number
