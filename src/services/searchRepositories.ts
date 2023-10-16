@@ -1,8 +1,18 @@
 import { api } from "./api"
 
+type licensesKeys = 'BSD Zero Clause License' | 'MIT License' | 'Apache License 2.0' | 'Creative Commons' | 'GNU General Public License'
+
+export const licenses: { [key in licensesKeys]: {parameter: string} } = {
+    'BSD Zero Clause License': {parameter: '0bsd'},
+    "MIT License": {parameter: 'mit'},
+    "Apache License 2.0": {parameter: 'apache-2.0'},
+    "Creative Commons": {parameter: 'cc'},
+    "GNU General Public License": {parameter: 'gpl'}
+}
+
 export interface ISearchRepositoriesProps {
     language?: string
-    license?: 'BSD Zero Clause License' | 'MIT License' | 'Apache License 2.0' | 'Creative Commons' | 'GNU General Public License'
+    license?: licensesKeys
     numberOfForks?: string
     numberOfStars?: string
     page?: number
@@ -12,33 +22,8 @@ export interface ISearchRepositoriesProps {
 }
 
 export const searchRepositories = async ({page = 1, per_page = 20, ...props}: ISearchRepositoriesProps) => {
-    let licenseAbbr;
-
-    if (props.license) {    
-        switch(props.license) {
-            case 'BSD Zero Clause License':
-                licenseAbbr = '0bsd'
-                break
-            
-            case 'MIT License':
-                licenseAbbr = 'mit'
-                break
-                
-            case 'Apache License 2.0':
-                licenseAbbr = 'apache-2.0'
-                break
-
-            case 'Creative Commons':
-                licenseAbbr = 'cc'
-                break
-
-            case 'GNU General Public License':
-                licenseAbbr = 'gpl'
-                break
-    }}
-
     const language = props.language ? `+language%3A${props.language}` : ''
-    const license = licenseAbbr ? `+license%3A${licenseAbbr}` : ''
+    const license = props.license ? `+license%3A${licenses[props.license].parameter}` : ''
     const forks = props.numberOfForks ? `+forks%3A${props.numberOfForks}` : ''
     const stars = props.numberOfStars ? `+stars%3A${props.numberOfStars}` : ''
     const topic = props.topic ? props.topic.reduce((acc, cv) => acc + `+topic%3A${cv}` , '') : ''
