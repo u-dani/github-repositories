@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, PlusCircle, Scale, GitFork } from 'lucide-react'
+import { X, PlusCircle, Scale, GitFork, Star } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -51,6 +51,7 @@ export const RepositoriesPage = () => {
 
   const languageInputRef = useRef<HTMLInputElement>(null)
   const forksInputRef = useRef<HTMLInputElement>(null)
+  const starsInputRef = useRef<HTMLInputElement>(null)
 
   const resetPageParameter = () => {
     setSearchParams(params => {
@@ -295,7 +296,7 @@ export const RepositoriesPage = () => {
             onChange={e => {
               handleFilter({
                 event: e,
-                dataAttr: 'fork',
+                dataAttr: 'forks',
                 filtersKey: 'numberOfForks',
               })
             }}>
@@ -356,7 +357,91 @@ export const RepositoriesPage = () => {
                         <input
                           type='radio'
                           name='filter-forks'
-                          data-fork={opt}
+                          data-forks={opt}
+                        />
+                        <Text size='sm'>{opt}</Text>
+                      </WrapperFlex>
+                    </Tag>
+                  ))}
+                </WrapperFlex>
+              </>
+            )}
+          </WrapperFlex>
+        </WrapperFlex>
+
+        {/* Stars Filter */}
+        <WrapperFlex direction='column' alignItems='start' gap='4px'>
+          <Text size='sm' weight='bold' color='gray'>
+            Número de Estrelas
+          </Text>
+
+          <WrapperFlex
+            direction='column'
+            onChange={e => {
+              handleFilter({
+                event: e,
+                dataAttr: 'stars',
+                filtersKey: 'numberOfStars',
+              })
+            }}>
+            {filters.numberOfStars ? (
+              <ListItem>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <Star size={16} />
+                    <Text size='sm'>{filters.numberOfStars}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      setFilters({ ...filters, numberOfStars: undefined })
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            ) : (
+              <>
+                <ListItem>
+                  <WrapperFlex
+                    gap='8px'
+                    justifyContent='start'
+                    as='form'
+                    onSubmit={e => {
+                      handleSubmitFilter({
+                        event: e,
+                        ref: starsInputRef,
+                        filtersKey: 'numberOfStars',
+                      })
+                    }}>
+                    <button
+                      type='submit'
+                      style={{ all: 'unset' }}
+                      className='button-icon'>
+                      <WrapperFlex>
+                        <Star size={16} />
+                      </WrapperFlex>
+                    </button>
+                    <Input
+                      type='text'
+                      placeholder='ex: 30..50, 100'
+                      ref={starsInputRef}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+
+                <WrapperFlex
+                  justifyContent='start'
+                  gap='8px'
+                  margin='6px 0px 0px 12px'>
+                  {['0..100', '200', '<200', '>500', '>1000'].map(opt => (
+                    <Tag>
+                      <WrapperFlex gap='8px' justifyContent='start'>
+                        <input
+                          type='radio'
+                          name='filter-stars'
+                          data-stars={opt}
                         />
                         <Text size='sm'>{opt}</Text>
                       </WrapperFlex>
