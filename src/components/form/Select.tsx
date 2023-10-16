@@ -27,7 +27,8 @@ const SelectStyle = styled.div<
 >`
   position: relative;
   font-size: ${({ fontSize }) => fontSize ?? '0.875rem'};
-  width: ${({ width }) => width ?? '100%'};
+  min-width: ${({ width }) => width ?? '100%'};
+  height: ${({ height }) => height ?? '35px'};
 
   .selected-value {
     width: 100%;
@@ -37,13 +38,11 @@ const SelectStyle = styled.div<
   }
 
   .container-selected-value {
-    width: 100%;
     border: 1px solid rgba(250, 250, 250, 0.4);
     color: rgba(250, 250, 250, 0.4);
     border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
-    height: ${({ height }) => height ?? '35px'};
   }
 
   ${Checkbox}:checked + .container-selected-value {
@@ -72,10 +71,10 @@ const SelectStyle = styled.div<
   }
 
   .container-options {
-    display: none;
     position: absolute;
-    min-width: max-content;
     width: 100%;
+    display: none;
+    min-width: max-content;
     flex-direction: column;
     border-radius: 4px;
     z-index: 50;
@@ -88,10 +87,11 @@ const SelectStyle = styled.div<
     }
 
     .form-options {
+      width: 100%;
       border-radius: 4px;
       background-color: #333;
       height: 100%;
-      overflow-y: scroll;
+      overflow-y: auto;
 
       &::-webkit-scrollbar {
         width: 3px;
