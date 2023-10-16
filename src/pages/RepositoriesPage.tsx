@@ -59,12 +59,22 @@ export const RepositoriesPage = () => {
     })
   }
 
-  const handleFilterByLanguage = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    const language = target.getAttribute('data-language')
+  const handleFilter = ({
+    event,
+    dataAttr,
+    filtersKey,
+  }: {
+    event: React.SyntheticEvent
+    dataAttr: string
+    filtersKey: keyof typeof filters
+  }) => {
+    const target = event.target as HTMLInputElement
+    const data = target.getAttribute(`data-${dataAttr}`)
 
-    if (language) {
-      setFilters({ ...filters, language })
+    const obj = { [filtersKey]: data }
+
+    if (data) {
+      setFilters(state => ({ ...state, ...obj }))
     }
 
     resetPageParameter()
@@ -78,28 +88,6 @@ export const RepositoriesPage = () => {
 
     if (language) {
       setFilters({ ...filters, language })
-    }
-
-    resetPageParameter()
-  }
-
-  const handleFilterByLicense = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    const license = target.getAttribute('data-license')
-
-    if (license) {
-      setFilters({ ...filters, license })
-    }
-
-    resetPageParameter()
-  }
-
-  const handleFilterByForks = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    const numberOfForks = target.getAttribute('data-fork')
-
-    if (numberOfForks) {
-      setFilters({ ...filters, numberOfForks })
     }
 
     resetPageParameter()
@@ -181,7 +169,15 @@ export const RepositoriesPage = () => {
             Linguagens
           </Text>
 
-          <WrapperFlex direction='column' onChange={handleFilterByLanguage}>
+          <WrapperFlex
+            direction='column'
+            onChange={e => {
+              handleFilter({
+                event: e,
+                dataAttr: 'language',
+                filtersKey: 'language',
+              })
+            }}>
             {filters.language ? (
               <ListItem>
                 <WrapperFlex>
@@ -244,7 +240,15 @@ export const RepositoriesPage = () => {
             Licenças
           </Text>
 
-          <WrapperFlex direction='column' onChange={handleFilterByLicense}>
+          <WrapperFlex
+            direction='column'
+            onChange={e => {
+              handleFilter({
+                event: e,
+                dataAttr: 'license',
+                filtersKey: 'license',
+              })
+            }}>
             {filters.license ? (
               <ListItem>
                 <WrapperFlex>
@@ -287,7 +291,15 @@ export const RepositoriesPage = () => {
             Número de Forks
           </Text>
 
-          <WrapperFlex direction='column' onChange={handleFilterByForks}>
+          <WrapperFlex
+            direction='column'
+            onChange={e => {
+              handleFilter({
+                event: e,
+                dataAttr: 'fork',
+                filtersKey: 'numberOfForks',
+              })
+            }}>
             {filters.numberOfForks ? (
               <ListItem>
                 <WrapperFlex>
