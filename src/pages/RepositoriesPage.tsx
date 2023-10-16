@@ -168,7 +168,8 @@ export const RepositoriesPage = () => {
       gap='32px'
       style={{ color: '#dddddd' }}>
       <WrapperFlex
-        width='360px'
+        // style={{ border: '1px solid red' }}
+        width='260px'
         direction='column'
         alignItems='start'
         gap='16px'>
@@ -253,6 +254,8 @@ export const RepositoriesPage = () => {
           </WrapperFlex>
         </WrapperFlex>
 
+        <Separator />
+
         {/* License Filter */}
         <WrapperFlex direction='column' alignItems='start' gap='4px'>
           <Text size='sm' weight='bold' color='gray'>
@@ -303,6 +306,59 @@ export const RepositoriesPage = () => {
             )}
           </WrapperFlex>
         </WrapperFlex>
+
+        <Separator />
+
+        {/* Topic Filter */}
+        <WrapperFlex direction='column' alignItems='start' gap='4px'>
+          <Text size='sm' weight='bold' color='gray'>
+            Tópicos
+          </Text>
+
+          <WrapperFlex direction='column'>
+            <WrapperFlex margin='0px 0px 6px 0px'>
+              <ListItem>
+                <WrapperFlex
+                  gap='8px'
+                  justifyContent='start'
+                  as='form'
+                  onSubmit={handleSubmitTopicFilter}>
+                  <button type='submit' style={{ all: 'unset' }}>
+                    <WrapperFlex>
+                      <Plus size={20} />
+                    </WrapperFlex>
+                  </button>
+                  <Input
+                    type='text'
+                    placeholder='ex: game, javascript'
+                    ref={topicInputRef}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            </WrapperFlex>
+
+            {filters?.topic?.map((topic, index) => (
+              <ListItem key={`${topic}-${index}`}>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <Text size='sm'>{topic}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      filters.topic?.splice(index, 1)
+                      setFilters(state => ({ ...state, topic: filters.topic }))
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            ))}
+          </WrapperFlex>
+        </WrapperFlex>
+
+        <Separator />
 
         {/* Forks Filter */}
         <WrapperFlex direction='column' alignItems='start' gap='4px'>
@@ -369,6 +425,7 @@ export const RepositoriesPage = () => {
                 <WrapperFlex
                   justifyContent='start'
                   gap='8px'
+                  wrap
                   margin='6px 0px 0px 12px'>
                   {['<5', '50..100', '200', '>500'].map(opt => (
                     <Tag>
@@ -387,6 +444,8 @@ export const RepositoriesPage = () => {
             )}
           </WrapperFlex>
         </WrapperFlex>
+
+        <Separator />
 
         {/* Stars Filter */}
         <WrapperFlex direction='column' alignItems='start' gap='4px'>
@@ -453,6 +512,7 @@ export const RepositoriesPage = () => {
                 <WrapperFlex
                   justifyContent='start'
                   gap='8px'
+                  wrap
                   margin='6px 0px 0px 12px'>
                   {['0..100', '200', '<200', '>500', '>1000'].map(opt => (
                     <Tag>
@@ -469,72 +529,6 @@ export const RepositoriesPage = () => {
                 </WrapperFlex>
               </>
             )}
-          </WrapperFlex>
-        </WrapperFlex>
-
-        {/* Topic Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Tópicos
-          </Text>
-
-          <WrapperFlex direction='column'>
-            {/* <ListItem>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Circle language={filters.language} />
-                    <Text size='sm'>{filters.language}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      setFilters({ ...filters, language: undefined })
-                      resetPageParameter()
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem> */}
-
-            <WrapperFlex margin='0px 0px 6px 0px'>
-              <ListItem>
-                <WrapperFlex
-                  gap='8px'
-                  justifyContent='start'
-                  as='form'
-                  onSubmit={handleSubmitTopicFilter}>
-                  <button type='submit' style={{ all: 'unset' }}>
-                    <WrapperFlex>
-                      <Plus size={20} />
-                    </WrapperFlex>
-                  </button>
-                  <Input
-                    type='text'
-                    placeholder='ex: game, javascript'
-                    ref={topicInputRef}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            </WrapperFlex>
-
-            {filters?.topic?.map((topic, index) => (
-              <ListItem key={`${topic}-${index}`}>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Text size='sm'>{topic}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      filters.topic?.splice(index, 1)
-                      setFilters(state => ({ ...state, topic: filters.topic }))
-                      resetPageParameter()
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ))}
           </WrapperFlex>
         </WrapperFlex>
       </WrapperFlex>
@@ -564,6 +558,12 @@ export const RepositoriesPage = () => {
     </WrapperFlex>
   )
 }
+
+const Separator = styled.span`
+  width: 100%;
+  border-top: 1px solid #333;
+  margin: 2px 0px;
+`
 
 const Tag = styled(LinkStyle).attrs(() => ({
   variant: 'tag',
