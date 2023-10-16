@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, PlusCircle, Scale } from 'lucide-react'
+import { X, PlusCircle, Scale, GitFork } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -17,16 +17,7 @@ import { Pagination } from '../components/Pagination'
 import { SearchForm } from '../components/form/SearchForm'
 import { useNavigate } from 'react-router-dom'
 import { Loading } from '../components/Loading'
-
-const languages = [
-  'JavaScript',
-  'TypeScript',
-  'Python',
-  'Shell',
-  'Kotlin',
-  'SASS',
-  'HTML',
-]
+import { LinkStyle } from '../components/Link'
 
 interface IReposData {
   total_count: number
@@ -49,12 +40,17 @@ export const RepositoriesPage = () => {
     per_page: 20,
   })
 
+  const languages = [
+    ...new Set(reposData?.items.map(repos => repos.language)),
+  ].filter(lang => lang) as string[]
+
   const maxPages =
     reposData?.total_count && filters.per_page
       ? Math.ceil(reposData.total_count / filters.per_page)
       : 1
 
   const languageInputRef = useRef<HTMLInputElement>(null)
+  const forksInputRef = useRef<HTMLInputElement>(null)
 
   const resetPageParameter = () => {
     setSearchParams(params => {
@@ -93,6 +89,30 @@ export const RepositoriesPage = () => {
 
     if (license) {
       setFilters({ ...filters, license })
+    }
+
+    resetPageParameter()
+  }
+
+  const handleFilterByForks = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const numberOfForks = target.getAttribute('data-fork')
+
+    if (numberOfForks) {
+      setFilters({ ...filters, numberOfForks })
+    }
+
+    resetPageParameter()
+  }
+
+  const handleSubmitForksForm = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+    const numberOfForks = removeExtraSpacesFromString(
+      forksInputRef.current?.value ?? ''
+    )
+
+    if (numberOfForks) {
+      setFilters({ ...filters, numberOfForks })
     }
 
     resetPageParameter()
@@ -155,6 +175,7 @@ export const RepositoriesPage = () => {
           Filtrar por
         </Text>
 
+        {/* Language Filter */}
         <WrapperFlex direction='column' alignItems='start' gap='4px'>
           <Text size='sm' weight='bold' color='gray'>
             Linguagens
@@ -217,6 +238,7 @@ export const RepositoriesPage = () => {
           </WrapperFlex>
         </WrapperFlex>
 
+        {/* License Filter */}
         <WrapperFlex direction='column' alignItems='start' gap='4px'>
           <Text size='sm' weight='bold' color='gray'>
             Licenças
@@ -258,9 +280,79 @@ export const RepositoriesPage = () => {
             )}
           </WrapperFlex>
         </WrapperFlex>
+
+        {/* Forks Filter */}
+        <WrapperFlex direction='column' alignItems='start' gap='4px'>
+          <Text size='sm' weight='bold' color='gray'>
+            Número de Forks
+          </Text>
+
+          <WrapperFlex direction='column' onChange={handleFilterByForks}>
+            {filters.numberOfForks ? (
+              <ListItem>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <GitFork size={16} strokeWidth={2} />
+                    <Text size='sm'>{filters.numberOfForks}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      setFilters({ ...filters, numberOfForks: undefined })
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            ) : (
+              <>
+                <ListItem>
+                  <WrapperFlex
+                    gap='8px'
+                    justifyContent='start'
+                    as='form'
+                    onSubmit={handleSubmitForksForm}>
+                    <button
+                      type='submit'
+                      style={{ all: 'unset' }}
+                      className='button-icon'>
+                      <WrapperFlex>
+                        <GitFork size={16} strokeWidth={2} />
+                      </WrapperFlex>
+                    </button>
+                    <Input
+                      type='text'
+                      placeholder='ex: 30..50, 100'
+                      ref={forksInputRef}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+
+                <WrapperFlex
+                  justifyContent='start'
+                  gap='8px'
+                  margin='6px 0px 0px 12px'>
+                  {['<5', '50..100', '200', '>500'].map(opt => (
+                    <Tag>
+                      <WrapperFlex gap='8px' justifyContent='start'>
+                        <input
+                          type='radio'
+                          name='filter-forks'
+                          data-fork={opt}
+                        />
+                        <Text size='sm'>{opt}</Text>
+                      </WrapperFlex>
+                    </Tag>
+                  ))}
+                </WrapperFlex>
+              </>
+            )}
+          </WrapperFlex>
+        </WrapperFlex>
       </WrapperFlex>
 
-      {/* repos section */}
+      {/* Repos Section */}
       <WrapperFlex direction='column' alignItems='start' gap='16px'>
         <SearchForm
           WrapperFlexProps={{ width: '100%' }}
@@ -286,6 +378,18 @@ export const RepositoriesPage = () => {
   )
 }
 
+const Tag = styled(LinkStyle).attrs(() => ({
+  variant: 'tag',
+}))`
+  position: relative;
+
+  input[type='radio'] {
+    all: unset;
+    position: absolute;
+    inset: 0;
+  }
+`
+
 const Input = styled.input`
   background: transparent;
   font-size: 0.9rem;
@@ -294,8 +398,13 @@ const Input = styled.input`
   outline: none;
   color: #ddd;
 
+  .button-icon {
+    color: #a5a4a4;
+  }
+
   &::placeholder {
-    color: #ddd;
+    color: #a5a4a4;
+    font-weight: 500;
   }
 
   &:focus {
