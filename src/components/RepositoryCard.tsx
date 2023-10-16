@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { GitFork, Star, Scale, ArrowUpRight } from 'lucide-react'
-import { ISearchUserRepositories } from '../services/searchUserRepositories'
+import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
 import { Link } from './Link'
 import { Text } from './Text'
 import { WrapperFlex } from './layout/WrapperFlex'
@@ -19,10 +19,11 @@ const languageColors: { [key: string]: string } = {
   PHP: '#4f5d95',
   Python: '#58a6ff',
   Ruby: '#701516',
-  SASS: '#ff0d86',
-  SCSS: '#ff0d86',
+  Sass: '#ff0d86',
+  Scss: '#ff0d86',
   Shell: '#89e051',
   TypeScript: '#79c0ff',
+  GDScript: '#379bf3',
 }
 
 export const Circle = styled.div<{
@@ -51,7 +52,7 @@ export const RepositoryCard = ({
   name,
   stargazers_count,
   topics,
-}: ISearchUserRepositories) => {
+}: ISearchUserRepositoriesResponse) => {
   return (
     <RepositoryCardStyle
       direction='column'
