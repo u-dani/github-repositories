@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, PlusCircle, Scale, GitFork, Star } from 'lucide-react'
+import { X, Plus, Scale, GitFork, Star } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
 import { useState, useRef, useEffect } from 'react'
 import {
@@ -52,6 +52,7 @@ export const RepositoriesPage = () => {
   const languageInputRef = useRef<HTMLInputElement>(null)
   const forksInputRef = useRef<HTMLInputElement>(null)
   const starsInputRef = useRef<HTMLInputElement>(null)
+  const topicInputRef = useRef<HTMLInputElement>(null)
 
   const resetPageParameter = () => {
     setSearchParams(params => {
@@ -95,6 +96,24 @@ export const RepositoriesPage = () => {
     if (valueRef) {
       const obj = { [filtersKey]: valueRef }
       setFilters(state => ({ ...state, ...obj }))
+    }
+
+    resetPageParameter()
+  }
+
+  const handleSubmitTopicFilter = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+    const topic = removeExtraSpacesFromString(
+      topicInputRef.current?.value ?? ''
+    )
+
+    if (topic && topicInputRef.current) {
+      const topicArr = filters.topic ?? []
+      const topicObj = { topic: topicArr.concat(topic) }
+
+      setFilters(state => ({ ...state, ...topicObj }))
+
+      topicInputRef.current.value = ''
     }
 
     resetPageParameter()
@@ -219,7 +238,7 @@ export const RepositoriesPage = () => {
                     }}>
                     <button type='submit' style={{ all: 'unset' }}>
                       <WrapperFlex>
-                        <PlusCircle size={20} />
+                        <Plus size={20} />
                       </WrapperFlex>
                     </button>
                     <Input
@@ -450,6 +469,72 @@ export const RepositoriesPage = () => {
                 </WrapperFlex>
               </>
             )}
+          </WrapperFlex>
+        </WrapperFlex>
+
+        {/* Topic Filter */}
+        <WrapperFlex direction='column' alignItems='start' gap='4px'>
+          <Text size='sm' weight='bold' color='gray'>
+            Tópicos
+          </Text>
+
+          <WrapperFlex direction='column'>
+            {/* <ListItem>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <Circle language={filters.language} />
+                    <Text size='sm'>{filters.language}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      setFilters({ ...filters, language: undefined })
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem> */}
+
+            <WrapperFlex margin='0px 0px 6px 0px'>
+              <ListItem>
+                <WrapperFlex
+                  gap='8px'
+                  justifyContent='start'
+                  as='form'
+                  onSubmit={handleSubmitTopicFilter}>
+                  <button type='submit' style={{ all: 'unset' }}>
+                    <WrapperFlex>
+                      <Plus size={20} />
+                    </WrapperFlex>
+                  </button>
+                  <Input
+                    type='text'
+                    placeholder='ex: game, javascript'
+                    ref={topicInputRef}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            </WrapperFlex>
+
+            {filters?.topic?.map((topic, index) => (
+              <ListItem key={`${topic}-${index}`}>
+                <WrapperFlex>
+                  <WrapperFlex gap='8px' justifyContent='start'>
+                    <Text size='sm'>{topic}</Text>
+                  </WrapperFlex>
+                  <X
+                    size={20}
+                    className='close-icon'
+                    onClick={() => {
+                      filters.topic?.splice(index, 1)
+                      setFilters(state => ({ ...state, topic: filters.topic }))
+                      resetPageParameter()
+                    }}
+                  />
+                </WrapperFlex>
+              </ListItem>
+            ))}
           </WrapperFlex>
         </WrapperFlex>
       </WrapperFlex>
