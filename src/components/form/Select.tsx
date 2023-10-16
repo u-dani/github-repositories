@@ -28,7 +28,6 @@ const SelectStyle = styled.div<
   position: relative;
   font-size: ${({ fontSize }) => fontSize ?? '0.875rem'};
   min-width: ${({ width }) => width ?? '100%'};
-  height: ${({ height }) => height ?? '35px'};
 
   .selected-value {
     width: 100%;
@@ -38,6 +37,7 @@ const SelectStyle = styled.div<
   }
 
   .container-selected-value {
+    height: ${({ height }) => height ?? '35px'};
     border: 1px solid rgba(250, 250, 250, 0.4);
     color: rgba(250, 250, 250, 0.4);
     border-radius: 4px;
