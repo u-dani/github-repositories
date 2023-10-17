@@ -2,7 +2,7 @@ import { Link } from '../components/Link'
 import { SearchForm } from '../components/form/SearchForm'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { WrapperResponsive } from '../components/layout/WrapperResponsive'
+import { WrapperMediaQuery } from '../components/layout/WrapperMediaQuery'
 
 export const HomePage = () => {
   return (
@@ -16,8 +16,8 @@ export const HomePage = () => {
         Repositórios do Github
       </Text>
 
-      <WrapperResponsive.Provider maxWidthMobile={600}>
-        <WrapperResponsive.Desktop>
+      <WrapperMediaQuery.Provider>
+        <WrapperMediaQuery.Container minWidth={600}>
           <SearchForm
             InputProps={{ height: '45px', fontSize: '1rem' }}
             SelectProps={{
@@ -26,17 +26,17 @@ export const HomePage = () => {
               fontSize: '1rem',
             }}
           />
-        </WrapperResponsive.Desktop>
+        </WrapperMediaQuery.Container>
 
-        <WrapperResponsive.Mobile>
+        <WrapperMediaQuery.Container maxWidth={600}>
           <SearchForm
             SelectProps={{
               id: 'select-search-form-app',
               width: '100px',
             }}
           />
-        </WrapperResponsive.Mobile>
-      </WrapperResponsive.Provider>
+        </WrapperMediaQuery.Container>
+      </WrapperMediaQuery.Provider>
 
       <Text size='sm' color='gray'>
         Projeto feito por{' '}
