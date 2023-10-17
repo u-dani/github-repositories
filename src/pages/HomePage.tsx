@@ -1,8 +1,8 @@
+import MediaQuery from 'react-responsive'
 import { Link } from '../components/Link'
 import { SearchForm } from '../components/form/SearchForm'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { WrapperMediaQuery } from '../components/layout/WrapperMediaQuery'
 
 export const HomePage = () => {
   return (
@@ -16,27 +16,25 @@ export const HomePage = () => {
         Repositórios do Github
       </Text>
 
-      <WrapperMediaQuery.Provider>
-        <WrapperMediaQuery.Container minWidth={600}>
-          <SearchForm
-            InputProps={{ height: '45px', fontSize: '1rem' }}
-            SelectProps={{
-              id: 'select-search-form-app',
-              height: '45px',
-              fontSize: '1rem',
-            }}
-          />
-        </WrapperMediaQuery.Container>
+      <MediaQuery minWidth={600}>
+        <SearchForm
+          InputProps={{ height: '45px', fontSize: '1rem' }}
+          SelectProps={{
+            id: 'select-search-form-app',
+            height: '45px',
+            fontSize: '1rem',
+          }}
+        />
+      </MediaQuery>
 
-        <WrapperMediaQuery.Container maxWidth={600}>
-          <SearchForm
-            SelectProps={{
-              id: 'select-search-form-app',
-              width: '100px',
-            }}
-          />
-        </WrapperMediaQuery.Container>
-      </WrapperMediaQuery.Provider>
+      <MediaQuery maxWidth={599}>
+        <SearchForm
+          SelectProps={{
+            id: 'select-search-form-app',
+            width: '100px',
+          }}
+        />
+      </MediaQuery>
 
       <Text size='sm' color='gray'>
         Projeto feito por{' '}
