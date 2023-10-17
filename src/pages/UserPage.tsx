@@ -40,7 +40,10 @@ export const UserPage = () => {
   filteredLanguages.unshift('Tudo')
 
   const filteredRepositories = reposData?.filter(repo => {
-    if (!repo.name.includes(repositoryFilterInput)) {
+    const repoName = repo.name.toLowerCase()
+    const filterInput = repositoryFilterInput.toLowerCase()
+
+    if (!repoName.includes(filterInput)) {
       return
     }
 
@@ -51,9 +54,8 @@ export const UserPage = () => {
     return repo
   })
 
-  const reposPerPage = 20
   const page = Number(searchParams.get('page')) || 1
-
+  const reposPerPage = 20
   let repositoryArraySlice = filteredRepositories?.slice(
     reposPerPage * (page - 1),
     reposPerPage * page
