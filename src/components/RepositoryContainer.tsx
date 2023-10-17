@@ -33,4 +33,8 @@ const WrapperRepositories = styled.div`
   gap: 16px;
   grid-template-columns: 1fr 1fr;
   width: 100%;
+
+  @media screen and (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
 `
