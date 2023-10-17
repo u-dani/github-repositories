@@ -84,7 +84,7 @@ export const UserPage = () => {
     })
   }
 
-  // max 1k de repositories
+  // max 500 repositories
   const requestAllUserRepositories = async ({
     username,
     numberOfPublicRepos,
@@ -92,7 +92,7 @@ export const UserPage = () => {
     username: string
     numberOfPublicRepos: number
   }) => {
-    const numRepos = numberOfPublicRepos > 1000 ? 1000 : numberOfPublicRepos
+    const numRepos = numberOfPublicRepos > 500 ? 500 : numberOfPublicRepos
 
     const repos = []
     const numberOfPages = Math.ceil(numRepos / 100)
