@@ -16,6 +16,7 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
+import MediaQuery from 'react-responsive'
 
 export const UserPage = () => {
   const { user: username } = useParams()
@@ -139,59 +140,103 @@ export const UserPage = () => {
   }, [username])
 
   return (
-    <WrapperFlex width='100%' alignItems='start' padding='40px' gap='32px'>
-      <WrapperFlex width='280px'>
-        {isLoading ? (
-          <WrapperFlex direction='column' gap='4px' height='80vh'>
-            <Loading />
-            <Text>Buscando usuário...</Text>
-          </WrapperFlex>
-        ) : (
-          <>
-            {userData ? (
-              <UserCard {...userData} />
-            ) : (
-              <WrapperFlex direction='column' gap='4px' height='80vh'>
-                <HeartCrack size={32} style={{ color: 'tomato' }} />
-                <Text>Usuário não encontrado!</Text>
-              </WrapperFlex>
-            )}
-          </>
-        )}
-      </WrapperFlex>
+    <WrapperUserPage>
+      <MediaQuery maxWidth={800}>
+        <SearchForm
+          WrapperFlexProps={{
+            gap: '16px',
+          }}
+          SelectProps={{
+            id: 'search-form',
+            width: '120px',
+          }}
+        />
+      </MediaQuery>
+
+      {/* User Card Data Desktop */}
+      <MediaQuery minWidth={801}>
+        <WrapperFlex maxWidth='260px' width='40vw'>
+          {isLoading ? (
+            <WrapperFlex direction='column' gap='4px' height='320px'>
+              <Loading />
+              <Text>Buscando usuário...</Text>
+            </WrapperFlex>
+          ) : (
+            <>
+              {userData ? (
+                <UserCard {...userData} />
+              ) : (
+                <WrapperFlex direction='column' gap='4px' height='320px'>
+                  <HeartCrack size={32} style={{ color: 'tomato' }} />
+                  <Text>Usuário não encontrado!</Text>
+                </WrapperFlex>
+              )}
+            </>
+          )}
+        </WrapperFlex>
+      </MediaQuery>
+
+      {/* User Card Data Mobile */}
+      <MediaQuery maxWidth={800}>
+        <WrapperFlex>
+          {isLoading ? (
+            <WrapperFlex direction='column' gap='4px' height='320px'>
+              <Loading />
+              <Text>Buscando usuário...</Text>
+            </WrapperFlex>
+          ) : (
+            <>
+              {userData ? (
+                <UserCard variant='landscape' {...userData} />
+              ) : (
+                <WrapperFlex direction='column' gap='4px' height='320px'>
+                  <HeartCrack size={32} style={{ color: 'tomato' }} />
+                  <Text>Usuário não encontrado!</Text>
+                </WrapperFlex>
+              )}
+            </>
+          )}
+        </WrapperFlex>
+      </MediaQuery>
 
       <WrapperFlex direction='column' gap='16px'>
         <Header direction='column' gap='16px'>
           <WrapperFlex gap='16px' justifyContent='space-between'>
-            <SearchForm
-              WrapperFlexProps={{
-                width: '100%',
-                maxWidth: '700px',
-                gap: '16px',
-              }}
-              SelectProps={{
-                id: 'search-form',
-                width: '160px',
-              }}
-            />
-            <ButtonFilter width='100px' height='35px'>
-              <input type='checkbox' name='show-filters' id='ishow-filters' />
-              <ListFilter
-                size={20}
-                strokeWidth={2.5}
-                className='button-filter-icon'
+            <MediaQuery minWidth={801}>
+              <SearchForm
+                WrapperFlexProps={{
+                  width: '100%',
+                  gap: '8px',
+                }}
+                SelectProps={{
+                  id: 'search-form',
+                  width: '130px',
+                }}
               />
-              <Text weight='bold' size='sm'>
+            </MediaQuery>
+
+            <MediaQuery minWidth={801}>
+              <ButtonFilter width='130px' height='35px'>
+                <input type='checkbox' name='show-filters' id='ishow-filters' />
+                <ListFilter
+                  size={20}
+                  strokeWidth={2.5}
+                  className='button-filter-icon'
+                />
+                <Text weight='bold' size='sm'>
+                  Filtros
+                </Text>
+              </ButtonFilter>
+            </MediaQuery>
+
+            <MediaQuery maxWidth={800}>
+              <Text weight='bold' size='lg'>
                 Filtros
               </Text>
-            </ButtonFilter>
+            </MediaQuery>
           </WrapperFlex>
 
-          <WrapperFilters
-            padding='8px'
-            gap='16px'
-            justifyContent='start'
-            id='oi'>
+          <WrapperFilters gap='16px' justifyContent='start'>
             <Input
               placeholder='Busque por um repositório'
               width='100%'
@@ -202,8 +247,8 @@ export const UserPage = () => {
 
             {filteredLanguages.length > 1 && (
               <Select
-                width='200px'
                 id='select-filter-by-language'
+                width='25%'
                 placeholder='Linguagem'
                 options={filteredLanguages}
                 selectedValue={languageSelectedValue}
@@ -238,13 +283,57 @@ export const UserPage = () => {
           </>
         )}
       </WrapperFlex>
-    </WrapperFlex>
+    </WrapperUserPage>
   )
 }
 
+const WrapperUserPage = styled(WrapperFlex)`
+  align-items: start;
+  padding: 40px;
+  gap: 32px;
+
+  @media screen and (max-width: 1000px) {
+    padding: 24px;
+  }
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
+`
+
+const ButtonTomato = styled(Button)`
+  background: tomato;
+  border-color: tomato;
+
+  &:hover:enabled,
+  &:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: tomato;
+  }
+`
+
 const WrapperFilters = styled(WrapperFlex)`
-  background-color: #222;
   border-radius: 4px;
+
+  @media screen and (max-width: 1000px) {
+    gap: 6px;
+
+    #select-filter-by-language {
+      width: 100px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    ${ButtonTomato} {
+      width: fit-content;
+      background: transparent;
+      border-color: transparent;
+      ${Text} {
+        display: none;
+      }
+    }
+  }
 `
 
 const Header = styled(WrapperFlex)`
@@ -254,6 +343,13 @@ const Header = styled(WrapperFlex)`
 
   &:has(#ishow-filters:checked) ${WrapperFilters} {
     display: flex;
+  }
+
+  @media screen and (max-width: 800px) {
+    gap: 8px;
+    ${WrapperFilters} {
+      display: flex;
+    }
   }
 `
 
@@ -283,17 +379,5 @@ const ButtonFilter = styled(Button)`
 
   &:has(#ishow-filters:checked) .button-filter-icon {
     transform: rotate(180deg);
-  }
-`
-
-const ButtonTomato = styled(Button)`
-  background: tomato;
-  border-color: tomato;
-
-  &:hover:enabled,
-  &:active {
-    background-color: initial;
-    background-position: 0 0;
-    color: tomato;
   }
 `
