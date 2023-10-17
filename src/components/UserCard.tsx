@@ -63,7 +63,7 @@ export const UserCard = ({
           <Text size='sm'>
             <WrapperFlex
               justifyContent='start'
-              alignItems='start'
+              alignItems='center'
               gap='6px'
               margin='8px 0px 16px 0px'>
               <Icon icon={Users2} />
