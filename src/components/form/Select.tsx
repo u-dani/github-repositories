@@ -79,11 +79,20 @@ const SelectStyle = styled.div<
     border-radius: 4px;
     z-index: 50;
     max-height: 300px;
+    overflow-y: auto;
+    top: 110%;
 
-    .transparent-separator {
-      background-color: transparent;
-      height: 4px;
-      min-height: 4px;
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #222;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: #c9c9c9;
     }
 
     .form-options {
@@ -91,20 +100,6 @@ const SelectStyle = styled.div<
       border-radius: 4px;
       background-color: #333;
       height: 100%;
-      overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 3px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: #222;
-      }
-
-      &::-webkit-scrollbar-thumb:vertical {
-        border-radius: 10px;
-        background-color: #f5f5f5;
-      }
     }
   }
 
@@ -170,7 +165,6 @@ export const Select = ({
       </WrapperFlex>
 
       <div className='container-options'>
-        <div className='transparent-separator'></div>
         <WrapperFlex
           as='form'
           className='form-options'
