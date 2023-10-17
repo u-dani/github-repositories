@@ -13,6 +13,7 @@ const languageColors: { [key: string]: string } = {
   assembly: '#5c4141',
   c: '#555555',
   css: '#563d7c',
+  elixir: '#bf97e4f',
   gdscript: '#379bf3',
   go: '#00add8',
   haskell: '#8e7bce',
@@ -47,6 +48,10 @@ const RepositoryCardStyle = styled(WrapperFlex)`
   border-radius: 4px;
   border: 1px solid #333;
   padding: 8px 16px;
+
+  .wrapper-description ${Text} {
+    overflow-wrap: anywhere;
+  }
 `
 
 export const RepositoryCard = ({
@@ -87,7 +92,11 @@ export const RepositoryCard = ({
         )}
       </WrapperFlex>
 
-      <WrapperFlex justifyContent='start' height='100%' alignItems='start'>
+      <WrapperFlex
+        justifyContent='start'
+        height='100%'
+        alignItems='start'
+        className='wrapper-description'>
         {description && (
           <Text color='gray' size='sm'>
             {description}
