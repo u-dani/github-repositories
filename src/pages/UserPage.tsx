@@ -84,6 +84,7 @@ export const UserPage = () => {
     })
   }
 
+  // max 1k de repositories
   const requestAllUserRepositories = async ({
     username,
     numberOfPublicRepos,
@@ -91,8 +92,10 @@ export const UserPage = () => {
     username: string
     numberOfPublicRepos: number
   }) => {
+    const numRepos = numberOfPublicRepos > 1000 ? 1000 : numberOfPublicRepos
+
     const repos = []
-    const numberOfPages = Math.ceil(numberOfPublicRepos / 100)
+    const numberOfPages = Math.ceil(numRepos / 100)
 
     for (let i = 1; i <= numberOfPages; i++) {
       const reposData = await searchUserRepositories({
@@ -137,7 +140,7 @@ export const UserPage = () => {
 
   return (
     <WrapperFlex width='100%' alignItems='start' padding='40px' gap='32px'>
-      <WrapperFlex width='360px'>
+      <WrapperFlex width='280px'>
         {isLoading ? (
           <WrapperFlex direction='column' gap='4px' height='80vh'>
             <Loading />
