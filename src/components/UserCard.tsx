@@ -30,90 +30,194 @@ export const Icon = ({ icon: Icon }: { icon: React.ElementType }) => {
   )
 }
 
-export const UserCard = (props: ISearchUserResponse) => {
+interface IUserCardProps extends ISearchUserResponse {
+  variant?: 'portrait' | 'landscape'
+}
+
+export const UserCard = ({
+  variant = 'portrait',
+  ...props
+}: IUserCardProps) => {
   return (
-    <WrapperFlex direction='column' alignItems='start' gap='8px'>
-      <WrapperFlex margin='4px 0px'>
-        <WrapperFlex width='90%'>
-          <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
-        </WrapperFlex>
-      </WrapperFlex>
-
-      <div>
-        <p>
-          <Text size='xl' weight='bold'>
-            {props.name}
-          </Text>
-        </p>
-        <Text size='lg' weight='light'>
-          {props.login}
-        </Text>
-      </div>
-
-      {props?.bio && <Text>{props?.bio}</Text>}
-
-      <Text size='sm'>
-        <WrapperFlex justifyContent='start' gap='6px' margin='8px 0px 16px 0px'>
-          <Icon icon={Users2} />
-          <Link
-            to={`https://github.com/${props.login}?tab=followers`}
-            target='_blank'>
-            <Text weight='bold'>{props.followers}</Text>{' '}
-            <Text color='gray'>seguidores</Text>
-          </Link>
-          <Text> · </Text>
-          <Link
-            to={`https://github.com/${props.login}?tab=following`}
-            target='_blank'>
-            <Text weight='bold'>{props.following}</Text>{' '}
-            <Text color='gray'>seguindo</Text>
-          </Link>
-        </WrapperFlex>
-
-        <WrapperFlex direction='column' gap='6px'>
-          {props?.company && (
-            <WrapperFlex justifyContent='start' alignItems='center' gap='6px'>
-              <Icon icon={Building} /> {props?.company}
+    <>
+      {variant === 'portrait' && (
+        <WrapperFlex direction='column' alignItems='start' gap='8px'>
+          <WrapperFlex margin='4px 0px'>
+            <WrapperFlex width='90%'>
+              <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
             </WrapperFlex>
-          )}
+          </WrapperFlex>
 
-          {props?.location && (
-            <WrapperFlex justifyContent='start' alignItems='center' gap='6px'>
-              <Icon icon={MapPin} /> {props?.location}
-            </WrapperFlex>
-          )}
+          <WrapperFlex alignItems='start' direction='column'>
+            <Text size='xl' weight='bold'>
+              {props.name}
+            </Text>
 
-          {props?.blog && (
-            <WrapperFlex justifyContent='start' alignItems='center' gap='6px'>
-              <Icon icon={LinkIcon} />
-              <Link to={props.blog}>
-                <Text size='sm'>{props.blog}</Text>
-              </Link>
-            </WrapperFlex>
-          )}
-
-          {props?.twitter_username && (
-            <WrapperFlex justifyContent='start' alignItems='center' gap='6px'>
-              <Icon icon={Twitter} />
-              <Link
-                to={`https://twitter.com/${props.twitter_username}`}
-                target='_blank'>
-                <Text size='sm'>@{props.twitter_username}</Text>
-              </Link>
-            </WrapperFlex>
-          )}
-        </WrapperFlex>
-      </Text>
-
-      <WrapperFlex margin='8px 0px'>
-        <Link to={props.html_url} variant='button' target='_blank'>
-          <WrapperFlex padding='6px 8px' height='35px'>
-            <Text weight='bold' size='sm'>
-              VISITAR
+            <Text size='lg' weight='light'>
+              {props.login}
             </Text>
           </WrapperFlex>
-        </Link>
-      </WrapperFlex>
-    </WrapperFlex>
+
+          {props?.bio && <Text>{props?.bio}</Text>}
+
+          <Text size='sm'>
+            <WrapperFlex
+              justifyContent='start'
+              gap='6px'
+              margin='8px 0px 16px 0px'>
+              <Icon icon={Users2} />
+              <Link
+                to={`https://github.com/${props.login}?tab=followers`}
+                target='_blank'>
+                <Text weight='bold'>{props.followers}</Text>{' '}
+                <Text color='gray'>seguidores</Text>
+              </Link>
+              <Text> · </Text>
+              <Link
+                to={`https://github.com/${props.login}?tab=following`}
+                target='_blank'>
+                <Text weight='bold'>{props.following}</Text>{' '}
+                <Text color='gray'>seguindo</Text>
+              </Link>
+            </WrapperFlex>
+
+            <WrapperFlex direction='column' gap='6px'>
+              {props?.company && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={Building} /> {props?.company}
+                </WrapperFlex>
+              )}
+
+              {props?.location && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={MapPin} /> {props?.location}
+                </WrapperFlex>
+              )}
+
+              {props?.blog && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={LinkIcon} />
+                  <Link to={props.blog}>
+                    <Text size='sm'>{props.blog}</Text>
+                  </Link>
+                </WrapperFlex>
+              )}
+
+              {props?.twitter_username && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={Twitter} />
+                  <Link
+                    to={`https://twitter.com/${props.twitter_username}`}
+                    target='_blank'>
+                    <Text size='sm'>@{props.twitter_username}</Text>
+                  </Link>
+                </WrapperFlex>
+              )}
+            </WrapperFlex>
+          </Text>
+
+          <WrapperFlex margin='8px 0px'>
+            <Link to={props.html_url} variant='button' target='_blank'>
+              <WrapperFlex padding='6px 8px' height='35px'>
+                <Text weight='bold' size='sm'>
+                  VISITAR
+                </Text>
+              </WrapperFlex>
+            </Link>
+          </WrapperFlex>
+        </WrapperFlex>
+      )}
+
+      {variant === 'landscape' && (
+        <WrapperFlex direction='column' alignItems='start' gap='12px'>
+          <WrapperFlex margin='0px' gap='16px'>
+            <WrapperFlex maxWidth='110px'>
+              <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
+            </WrapperFlex>
+
+            <WrapperFlex alignItems='start' direction='column'>
+              <Text size='xl' weight='bold'>
+                {props.name}
+              </Text>
+
+              <Text size='lg' weight='light'>
+                {props.login}
+              </Text>
+            </WrapperFlex>
+          </WrapperFlex>
+
+          {props?.bio && <Text>{props?.bio}</Text>}
+
+          <Text size='sm'>
+            <WrapperFlex direction='column' gap='6px'>
+              {props?.blog && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={LinkIcon} />
+                  <Link to={props.blog}>
+                    <Text size='sm'>{props.blog}</Text>
+                  </Link>
+                </WrapperFlex>
+              )}
+
+              {props?.twitter_username && (
+                <WrapperFlex
+                  justifyContent='start'
+                  alignItems='center'
+                  gap='6px'>
+                  <Icon icon={Twitter} />
+                  <Link
+                    to={`https://twitter.com/${props.twitter_username}`}
+                    target='_blank'>
+                    <Text size='sm'>@{props.twitter_username}</Text>
+                  </Link>
+                </WrapperFlex>
+              )}
+            </WrapperFlex>
+
+            <WrapperFlex justifyContent='start' gap='6px' margin='8px 0px'>
+              <Icon icon={Users2} />
+              <Link
+                to={`https://github.com/${props.login}?tab=followers`}
+                target='_blank'>
+                <Text weight='bold'>{props.followers}</Text>{' '}
+                <Text color='gray'>seguidores</Text>
+              </Link>
+              <Text> · </Text>
+              <Link
+                to={`https://github.com/${props.login}?tab=following`}
+                target='_blank'>
+                <Text weight='bold'>{props.following}</Text>{' '}
+                <Text color='gray'>seguindo</Text>
+              </Link>
+            </WrapperFlex>
+          </Text>
+
+          <WrapperFlex maxWidth='280px'>
+            <Link to={props.html_url} variant='button' target='_blank'>
+              <WrapperFlex padding='6px 8px' height='35px'>
+                <Text weight='bold' size='sm'>
+                  VISITAR
+                </Text>
+              </WrapperFlex>
+            </Link>
+          </WrapperFlex>
+        </WrapperFlex>
+      )}
+    </>
   )
 }
