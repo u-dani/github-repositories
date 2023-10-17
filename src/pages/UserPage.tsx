@@ -274,7 +274,7 @@ const ButtonTomato = styled(Button)`
   background: tomato;
   border-color: tomato;
 
-  &:hover,
+  &:hover:enabled,
   &:active {
     background-color: initial;
     background-position: 0 0;
