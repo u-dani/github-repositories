@@ -194,7 +194,7 @@ export const UserCard = ({
               )}
             </WrapperFlex>
 
-            <WrapperFlex justifyContent='start' gap='6px' margin='8px 0px'>
+            <WrapperFlex justifyContent='start' gap='6px' margin='8px 0px 0px'>
               <Icon icon={Users2} />
               <Link
                 to={`https://github.com/${props.login}?tab=followers`}
