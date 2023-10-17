@@ -63,22 +63,25 @@ export const UserCard = ({
           <Text size='sm'>
             <WrapperFlex
               justifyContent='start'
+              alignItems='start'
               gap='6px'
               margin='8px 0px 16px 0px'>
               <Icon icon={Users2} />
-              <Link
-                to={`https://github.com/${props.login}?tab=followers`}
-                target='_blank'>
-                <Text weight='bold'>{props.followers}</Text>{' '}
-                <Text color='gray'>seguidores</Text>
-              </Link>
-              <Text> · </Text>
-              <Link
-                to={`https://github.com/${props.login}?tab=following`}
-                target='_blank'>
-                <Text weight='bold'>{props.following}</Text>{' '}
-                <Text color='gray'>seguindo</Text>
-              </Link>
+              <WrapperFlex wrap justifyContent='start' gap='0px 6px'>
+                <Link
+                  to={`https://github.com/${props.login}?tab=followers`}
+                  target='_blank'>
+                  <Text weight='bold'>{props.followers}</Text>{' '}
+                  <Text color='gray'>seguidores</Text>
+                </Link>
+                <Text> · </Text>
+                <Link
+                  to={`https://github.com/${props.login}?tab=following`}
+                  target='_blank'>
+                  <Text weight='bold'>{props.following}</Text>{' '}
+                  <Text color='gray'>seguindo</Text>
+                </Link>
+              </WrapperFlex>
             </WrapperFlex>
 
             <WrapperFlex direction='column' gap='6px'>
@@ -148,9 +151,11 @@ export const UserCard = ({
             </WrapperFlex>
 
             <WrapperFlex alignItems='start' direction='column'>
-              <Text size='xl' weight='bold'>
-                {props.name}
-              </Text>
+              <Link to={props.html_url} target='_blank'>
+                <Text size='xl' weight='bold' color='blue'>
+                  {props.name}
+                </Text>
+              </Link>
 
               <Text size='lg' weight='light'>
                 {props.login}
@@ -206,16 +211,6 @@ export const UserCard = ({
               </Link>
             </WrapperFlex>
           </Text>
-
-          <WrapperFlex maxWidth='280px'>
-            <Link to={props.html_url} variant='button' target='_blank'>
-              <WrapperFlex padding='6px 8px' height='35px'>
-                <Text weight='bold' size='sm'>
-                  VISITAR
-                </Text>
-              </WrapperFlex>
-            </Link>
-          </WrapperFlex>
         </WrapperFlex>
       )}
     </>
