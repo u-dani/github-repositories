@@ -5,25 +5,28 @@ import { removeExtraSpacesFromString } from '../../services/removeExtraSpacesFro
 import { useNavigate } from 'react-router-dom'
 import { useState, useRef, SyntheticEvent } from 'react'
 
-const options = ['Usuários', 'Repositórios']
+type OptionsType = 'Usuários' | 'Repositórios'
+
+interface ISelectPropsInSearchForm
+  extends Omit<ISelectProps, 'handleSelect' | 'options'> {
+  defaultSelectedValue?: OptionsType
+}
 
 interface ISearchFormProps {
   WrapperFlexProps?: IWrapperFlexProps
-  SelectProps?: Omit<ISelectProps, 'handleSelect' | 'options'>
+  SelectProps?: ISelectPropsInSearchForm
   InputProps?: InputProps
-  handleError?: (message: string) => void
 }
+
+const options: OptionsType[] = ['Usuários', 'Repositórios']
 
 export const SearchForm = ({
   InputProps,
   SelectProps,
   WrapperFlexProps,
-  handleError = message => {
-    console.log(message)
-  },
 }: ISearchFormProps) => {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
-    options[0]
+    SelectProps?.defaultSelectedValue ?? options[0]
   )
   const navigate = useNavigate()
 
@@ -37,7 +40,7 @@ export const SearchForm = ({
     )
 
     if (!searchInputValue) {
-      handleError('Campo de busca vazio')
+      console.log('empty search field!')
       return
     }
 
@@ -57,7 +60,7 @@ export const SearchForm = ({
       {...WrapperFlexProps}>
       <Select
         id='select-search-form'
-        width='30%'
+        width='140px'
         options={options}
         selectedValue={selectedValue}
         handleSelect={value => {
