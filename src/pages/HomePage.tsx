@@ -1,7 +1,7 @@
-import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { Text } from '../components/Text'
-import { SearchForm } from '../components/form/SearchForm'
 import { Link } from '../components/Link'
+import { SearchForm } from '../components/form/SearchForm'
+import { Text } from '../components/Text'
+import { WrapperFlex } from '../components/layout/WrapperFlex'
 import { WrapperResponsive } from '../components/layout/WrapperResponsive'
 
 export const HomePage = () => {
@@ -11,12 +11,12 @@ export const HomePage = () => {
       gap='40px'
       height='100vh'
       padding='40px'
-      maxWidth='800px'>
+      maxWidth='700px'>
       <Text as='h1' size='xxl' align='center' weight='bold'>
         Repositórios do Github
       </Text>
 
-      <WrapperResponsive.Provider>
+      <WrapperResponsive.Provider maxWidthMobile={600}>
         <WrapperResponsive.Desktop>
           <SearchForm
             InputProps={{ height: '45px', fontSize: '1rem' }}
