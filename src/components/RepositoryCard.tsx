@@ -109,7 +109,7 @@ export const RepositoryCard = ({
       </WrapperFlex>
 
       <Text color='gray' size='xs'>
-        <WrapperFlex justifyContent='start' gap='16px'>
+        <WrapperFlex justifyContent='start' gap='2px 16px' wrap>
           {language && (
             <Text>
               <WrapperFlex gap='4px'>
