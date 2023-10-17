@@ -115,6 +115,18 @@ const SelectStyle = styled.div<
       background-color: #504e4ec5;
     }
   }
+
+  .gambiarra {
+    height: 10%;
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+
+    .warning {
+      display: none;
+    }
+  }
 `
 
 export const Select = ({
@@ -184,6 +196,20 @@ export const Select = ({
             </label>
           ))}
         </WrapperFlex>
+      </div>
+
+      <div className='gambiarra'>
+        <p className='warning'>
+          Do not remove this div, when the mouse leaves the Select it closes and
+          there is a little space between the Select and the Options, this
+          minimum space is enough to close the Select, so this div covers this
+          space :D
+        </p>
+        <p className='warning'>
+          Não remova essa div, quando o mouse sai do Select ele fecha e fica um
+          espacinho entre o Select e as Options, esse espaço mínimo é suficiente
+          para fechar o Select, então essa div cobre esse espaço :P
+        </p>
       </div>
     </SelectStyle>
   )
