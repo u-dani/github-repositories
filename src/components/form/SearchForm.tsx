@@ -56,7 +56,6 @@ export const SearchForm = ({
       gap='8px'
       as='form'
       onSubmit={submitSearch}
-      width='600px'
       {...WrapperFlexProps}>
       <Select
         id='select-search-form'
