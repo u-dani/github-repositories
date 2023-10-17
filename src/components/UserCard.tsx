@@ -34,7 +34,9 @@ export const UserCard = (props: ISearchUserResponse) => {
   return (
     <WrapperFlex direction='column' alignItems='start' gap='8px'>
       <WrapperFlex margin='4px 0px'>
-        <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
+        <WrapperFlex width='90%'>
+          <Avatar src={props.avatar_url} alt={`Avatar de ${props.login}`} />
+        </WrapperFlex>
       </WrapperFlex>
 
       <div>
