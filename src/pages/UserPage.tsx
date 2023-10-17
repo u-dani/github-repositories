@@ -84,11 +84,34 @@ export const UserPage = () => {
     })
   }
 
+  const requestAllUserRepositories = async ({
+    username,
+    numberOfPublicRepos,
+  }: {
+    username: string
+    numberOfPublicRepos: number
+  }) => {
+    const repos = []
+    const numberOfPages = Math.ceil(numberOfPublicRepos / 100)
+
+    for (let i = 1; i <= numberOfPages; i++) {
+      const reposData = await searchUserRepositories({
+        username,
+        page: i,
+        per_page: 100,
+      })
+      repos.push(reposData)
+    }
+
+    const reposArr = repos.reduce((arr, sub) => arr.concat(sub), [])
+    return reposArr
+  }
+
   useEffect(() => {
     async function request() {
-      try {
-        setIsLoading(true)
+      setIsLoading(true)
 
+      try {
         if (!username) {
           throw 'username is empty.'
         }
@@ -96,23 +119,11 @@ export const UserPage = () => {
         const userData = await searchUser(username)
         setUserData(userData)
 
-        const repos = []
-
-        const perPage = 20
-        const numberOfPages = Math.ceil(userData.public_repos / perPage)
-
-        for (let i = 1; i <= numberOfPages; i++) {
-          const reposData = await searchUserRepositories({
-            username,
-            page: i,
-            per_page: 20,
-          })
-          repos.push(reposData)
-        }
-
-        const reposArr = repos.reduce((arr, sub) => arr.concat(sub), [])
-
-        setReposData(reposArr)
+        const repos = await requestAllUserRepositories({
+          username,
+          numberOfPublicRepos: userData.public_repos,
+        })
+        setReposData(repos)
       } catch (error) {
         setUserData(undefined)
         setReposData(undefined)
@@ -188,7 +199,7 @@ export const UserPage = () => {
 
             {filteredLanguages.length > 1 && (
               <Select
-                width='30%'
+                width='200px'
                 id='select-filter-by-language'
                 placeholder='Linguagem'
                 options={filteredLanguages}
