@@ -114,6 +114,7 @@ export const UserPage = () => {
   useEffect(() => {
     async function request() {
       setIsLoading(true)
+      cleanFilters()
 
       try {
         if (!username) {
