@@ -1,43 +1,49 @@
-import styled from 'styled-components'
+import { createContext, useEffect, useState, useContext } from 'react'
+
+const IsMobileContext = createContext<boolean | undefined>(undefined)
 
 const WrapperResponsiveProvider = ({
   children,
   maxWidthMobile,
 }: {
   children: React.ReactNode
-  maxWidthMobile?: string
+  maxWidthMobile?: number
 }) => {
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)
+  const maxWidth = maxWidthMobile ?? 600
+
+  window.onresize = (e: Event) => {
+    const target = e.target as Window
+    const width = target.innerWidth
+    width <= maxWidth ? setIsMobile(true) : setIsMobile(false)
+  }
+
+  console.log('resize mlk ', isMobile)
+
+  useEffect(() => {
+    const { innerWidth: width } = window
+    width <= maxWidth ? setIsMobile(true) : setIsMobile(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <ContainerResponsiveStyle maxWidthMobile={maxWidthMobile}>
+    <IsMobileContext.Provider value={isMobile}>
       {children}
-    </ContainerResponsiveStyle>
+    </IsMobileContext.Provider>
   )
 }
 
-const DesktopContainer = styled.div``
-const MobileContainer = styled.div``
+const DesktopContainer = ({ children }: { children: React.ReactNode }) => {
+  const isMobile = useContext(IsMobileContext)
 
-const ContainerResponsiveStyle = styled.div<{ maxWidthMobile?: string }>`
-  width: 100%;
+  return !isMobile && <>{children}</>
+}
 
-  ${DesktopContainer} {
-    display: block;
-  }
+const MobileContainer = ({ children }: { children: React.ReactNode }) => {
+  const isMobile = useContext(IsMobileContext)
 
-  ${MobileContainer} {
-    display: none;
-  }
-
-  @media screen and (max-width: ${props => props.maxWidthMobile ?? '600px'}) {
-    ${MobileContainer} {
-      display: block;
-    }
-
-    ${DesktopContainer} {
-      display: none;
-    }
-  }
-`
+  return isMobile && <>{children}</>
+}
 
 export const WrapperResponsive = {
   Provider: WrapperResponsiveProvider,
