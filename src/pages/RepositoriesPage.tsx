@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
 import { X, Plus, Scale, GitFork, Star } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, SyntheticEvent, RefObject } from 'react'
 import {
   searchRepositories,
   ISearchRepositoriesProps,
@@ -29,94 +30,118 @@ const licensesKeys = Object.keys(licenses)
 export const RepositoriesPage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const query = searchParams.get('search') ?? ''
-  const page = Number(searchParams.get('page')) ?? 1
+
+  const topic = searchParams.get('topic')
+    ? [
+        ...new Set(
+          decodeURIComponent(searchParams.get('topic') ?? '')
+            .split(' ')
+            .filter(topic => topic)
+        ),
+      ]
+    : undefined
+
+  const searchParameters: ISearchRepositoriesProps = {
+    query: searchParams.get('search') || '',
+    page: Number(searchParams.get('page')) || 1,
+    language: searchParams.get('language') || undefined,
+    license: searchParams.get('license') || undefined,
+    topic: topic,
+    forks: searchParams.get('forks') || undefined,
+    stars: searchParams.get('stars') || undefined,
+    per_page: 20,
+  }
 
   const [isLoading, setIsLoading] = useState(true)
   const [reposData, setReposData] = useState<IReposData | undefined>()
-  const [filters, setFilters] = useState<ISearchRepositoriesProps>({
-    query,
-    page,
-    per_page: 20,
-  })
 
   const languages = [
     ...new Set(reposData?.items.map(repos => repos.language)),
   ].filter(lang => lang) as string[]
 
   const maxPages =
-    reposData?.total_count && filters.per_page
-      ? Math.ceil(reposData.total_count / filters.per_page)
+    reposData?.total_count && searchParameters.per_page
+      ? Math.ceil(reposData.total_count / searchParameters.per_page)
       : 1
 
   const languageInputRef = useRef<HTMLInputElement>(null)
+  const topicInputRef = useRef<HTMLInputElement>(null)
   const forksInputRef = useRef<HTMLInputElement>(null)
   const starsInputRef = useRef<HTMLInputElement>(null)
-  const topicInputRef = useRef<HTMLInputElement>(null)
 
-  const resetPageParameter = () => {
-    setSearchParams(params => {
-      params.set('page', '1')
-      return params
-    })
+  const updateSearchParameter = (
+    key: keyof typeof searchParameters,
+    value: string
+  ) => {
+    searchParams.set(key, value)
+    searchParams.set('page', '1')
+    setSearchParams(searchParams)
+  }
+
+  const deleteSearchParameter = (key: keyof typeof searchParameters) => {
+    searchParams.delete(key)
+    searchParams.set('page', '1')
+    setSearchParams(searchParams)
   }
 
   const handleFilter = ({
     event,
     dataAttr,
-    filtersKey,
+    searchParametersKey: key,
   }: {
-    event: React.SyntheticEvent
+    event: SyntheticEvent
     dataAttr: string
-    filtersKey: keyof typeof filters
+    searchParametersKey: keyof typeof searchParameters
   }) => {
     const target = event.target as HTMLInputElement
     const data = target.getAttribute(`data-${dataAttr}`)
 
     if (data) {
-      const obj = { [filtersKey]: data }
-      setFilters(state => ({ ...state, ...obj }))
+      updateSearchParameter(key, data)
     }
-
-    resetPageParameter()
   }
 
   const handleSubmitFilter = ({
     event,
     ref,
-    filtersKey,
+    searchParametersKey: key,
   }: {
-    event: React.SyntheticEvent
-    ref: React.RefObject<HTMLInputElement>
-    filtersKey: keyof typeof filters
+    event: SyntheticEvent
+    ref: RefObject<HTMLInputElement>
+    searchParametersKey: keyof typeof searchParameters
   }) => {
     event.preventDefault()
     const valueRef = removeExtraSpacesFromString(ref.current?.value ?? '')
 
     if (valueRef) {
-      const obj = { [filtersKey]: valueRef }
-      setFilters(state => ({ ...state, ...obj }))
+      updateSearchParameter(key, valueRef)
     }
-
-    resetPageParameter()
   }
 
-  const handleSubmitTopicFilter = (e: React.SyntheticEvent) => {
+  const handleSubmitTopicFilter = (e: SyntheticEvent) => {
     e.preventDefault()
-    const topic = removeExtraSpacesFromString(
-      topicInputRef.current?.value ?? ''
-    )
+    const topic = topicInputRef.current?.value.replace(/ /g, '')
 
     if (topic && topicInputRef.current) {
-      const topicArr = filters.topic ?? []
-      const topicObj = { topic: topicArr.concat(topic) }
+      const topicArr = searchParameters.topic ?? []
+      topicArr.push(topic)
 
-      setFilters(state => ({ ...state, ...topicObj }))
-
+      updateSearchParameter('topic', topicArr.join(' '))
       topicInputRef.current.value = ''
     }
+  }
 
-    resetPageParameter()
+  const removeTopic = (topic: string) => {
+    console.log('topic ', topic)
+
+    const filteredTopic = searchParameters.topic?.filter(data => data !== topic)
+
+    if (!filteredTopic || filteredTopic.length === 0) {
+      deleteSearchParameter('topic')
+      return
+    }
+
+    updateSearchParameter('topic', filteredTopic.join(' '))
   }
 
   const formatNumber = (number: number) => {
@@ -140,14 +165,16 @@ export const RepositoriesPage = () => {
   }
 
   useEffect(() => {
-    if (!query) {
+    if (!searchParameters.query) {
       return navigate(`/`)
     }
 
     async function request() {
       try {
         setIsLoading(true)
-        const repos = await searchRepositories({ ...filters, query, page })
+        const repos = await searchRepositories({
+          ...searchParameters,
+        })
         setReposData(repos)
       } catch (err) {
         setReposData(undefined)
@@ -156,10 +183,10 @@ export const RepositoriesPage = () => {
         setIsLoading(false)
       }
     }
-
     request()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, page, query])
+  }, [searchParams])
 
   return (
     <WrapperFlex
@@ -188,22 +215,21 @@ export const RepositoriesPage = () => {
               handleFilter({
                 event: e,
                 dataAttr: 'language',
-                filtersKey: 'language',
+                searchParametersKey: 'language',
               })
             }}>
-            {filters.language ? (
+            {searchParameters.language ? (
               <ListItem>
                 <WrapperFlex>
                   <WrapperFlex gap='8px' justifyContent='start'>
-                    <Circle language={filters.language} />
-                    <Text size='sm'>{filters.language}</Text>
+                    <Circle language={searchParameters.language} />
+                    <Text size='sm'>{searchParameters.language}</Text>
                   </WrapperFlex>
                   <X
                     size={20}
                     className='close-icon'
                     onClick={() => {
-                      setFilters({ ...filters, language: undefined })
-                      resetPageParameter()
+                      deleteSearchParameter('language')
                     }}
                   />
                 </WrapperFlex>
@@ -229,13 +255,13 @@ export const RepositoriesPage = () => {
                     gap='8px'
                     justifyContent='start'
                     as='form'
-                    onSubmit={e => {
+                    onSubmit={e =>
                       handleSubmitFilter({
                         event: e,
                         ref: languageInputRef,
-                        filtersKey: 'language',
+                        searchParametersKey: 'language',
                       })
-                    }}>
+                    }>
                     <button type='submit' style={{ all: 'unset' }}>
                       <WrapperFlex>
                         <Plus size={20} />
@@ -267,22 +293,21 @@ export const RepositoriesPage = () => {
               handleFilter({
                 event: e,
                 dataAttr: 'license',
-                filtersKey: 'license',
+                searchParametersKey: 'license',
               })
             }}>
-            {filters.license ? (
+            {searchParameters.license ? (
               <ListItem>
                 <WrapperFlex>
                   <WrapperFlex gap='8px' justifyContent='start'>
                     <Scale size={20} />
-                    <Text size='sm'>{filters.license}</Text>
+                    <Text size='sm'>{searchParameters.license}</Text>
                   </WrapperFlex>
                   <X
                     size={20}
                     className='close-icon'
                     onClick={() => {
-                      setFilters({ ...filters, license: undefined })
-                      resetPageParameter()
+                      deleteSearchParameter('license')
                     }}
                   />
                 </WrapperFlex>
@@ -336,8 +361,8 @@ export const RepositoriesPage = () => {
               </ListItem>
             </WrapperFlex>
 
-            {filters?.topic?.map((topic, index) => (
-              <ListItem key={`${topic}-${index}`}>
+            {searchParameters.topic?.map(topic => (
+              <ListItem key={topic}>
                 <WrapperFlex>
                   <WrapperFlex gap='8px' justifyContent='start'>
                     <Text size='sm'>{topic}</Text>
@@ -346,9 +371,7 @@ export const RepositoriesPage = () => {
                     size={20}
                     className='close-icon'
                     onClick={() => {
-                      filters.topic?.splice(index, 1)
-                      setFilters(state => ({ ...state, topic: filters.topic }))
-                      resetPageParameter()
+                      removeTopic(topic)
                     }}
                   />
                 </WrapperFlex>
@@ -371,22 +394,21 @@ export const RepositoriesPage = () => {
               handleFilter({
                 event: e,
                 dataAttr: 'forks',
-                filtersKey: 'numberOfForks',
+                searchParametersKey: 'forks',
               })
             }}>
-            {filters.numberOfForks ? (
+            {searchParameters.forks ? (
               <ListItem>
                 <WrapperFlex>
                   <WrapperFlex gap='8px' justifyContent='start'>
                     <GitFork size={16} strokeWidth={2} />
-                    <Text size='sm'>{filters.numberOfForks}</Text>
+                    <Text size='sm'>{searchParameters.forks}</Text>
                   </WrapperFlex>
                   <X
                     size={20}
                     className='close-icon'
                     onClick={() => {
-                      setFilters({ ...filters, numberOfForks: undefined })
-                      resetPageParameter()
+                      deleteSearchParameter('forks')
                     }}
                   />
                 </WrapperFlex>
@@ -402,7 +424,7 @@ export const RepositoriesPage = () => {
                       handleSubmitFilter({
                         event: e,
                         ref: forksInputRef,
-                        filtersKey: 'numberOfForks',
+                        searchParametersKey: 'forks',
                       })
                     }}>
                     <button
@@ -458,22 +480,21 @@ export const RepositoriesPage = () => {
               handleFilter({
                 event: e,
                 dataAttr: 'stars',
-                filtersKey: 'numberOfStars',
+                searchParametersKey: 'stars',
               })
             }}>
-            {filters.numberOfStars ? (
+            {searchParameters.stars ? (
               <ListItem>
                 <WrapperFlex>
                   <WrapperFlex gap='8px' justifyContent='start'>
                     <Star size={16} />
-                    <Text size='sm'>{filters.numberOfStars}</Text>
+                    <Text size='sm'>{searchParameters.stars}</Text>
                   </WrapperFlex>
                   <X
                     size={20}
                     className='close-icon'
                     onClick={() => {
-                      setFilters({ ...filters, numberOfStars: undefined })
-                      resetPageParameter()
+                      deleteSearchParameter('stars')
                     }}
                   />
                 </WrapperFlex>
@@ -489,7 +510,7 @@ export const RepositoriesPage = () => {
                       handleSubmitFilter({
                         event: e,
                         ref: starsInputRef,
-                        filtersKey: 'numberOfStars',
+                        searchParametersKey: 'stars',
                       })
                     }}>
                     <button
@@ -536,7 +557,11 @@ export const RepositoriesPage = () => {
       <WrapperFlex direction='column' alignItems='start' gap='16px'>
         <SearchForm
           WrapperFlexProps={{ width: '100%' }}
-          SelectProps={{ id: 'search-form-repositories-page', width: '200px' }}
+          SelectProps={{
+            id: 'search-form-repositories-page',
+            width: '150px',
+            defaultSelectedValue: 'Repositórios',
+          }}
         />
 
         {isLoading ? (
@@ -547,7 +572,8 @@ export const RepositoriesPage = () => {
         ) : (
           <>
             <Text weight='bold'>
-              {formatNumber(reposData?.total_count ?? 0)} resultados de {query}
+              {formatNumber(reposData?.total_count ?? 0)} resultados de{' '}
+              {searchParameters.query}
             </Text>
             <RepositoryContainer repos={reposData?.items} />
             {maxPages > 1 && <Pagination maxPages={maxPages} />}
