@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { ChevronDown } from 'lucide-react'
 import { WrapperFlex } from '../layout/WrapperFlex'
-import { Checkbox } from './Checkbox'
 
 export interface ISelectProps {
   id: string
