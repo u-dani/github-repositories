@@ -1,3 +1,4 @@
+import MediaQuery from 'react-responsive'
 import styled from 'styled-components'
 import { Button } from '../components/form/Button'
 import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
@@ -16,7 +17,6 @@ import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import MediaQuery from 'react-responsive'
 
 export const UserPage = () => {
   const { user: username } = useParams()
@@ -354,7 +354,7 @@ const Header = styled(WrapperFlex)`
   }
 `
 
-const ButtonFilter = styled(Button)`
+export const ButtonFilter = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
