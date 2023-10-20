@@ -31,6 +31,7 @@ const languageColors: { [key: string]: string } = {
   scss: '#ff0d86',
   shell: '#89e051',
   typescript: '#79c0ff',
+  vue: '#099609',
 }
 
 export const Circle = styled.div<{
