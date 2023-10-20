@@ -1,26 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import MediaQuery from 'react-responsive'
 import styled from 'styled-components'
+import { ButtonFilter } from '../components/form/ButtonFilter'
 import { Circle } from '../components/RepositoryCard'
+import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
+import { LinkStyle } from '../components/Link'
+import { Loading } from '../components/Loading'
+import { Pagination } from '../components/Pagination'
+import { RepositoryContainer } from '../components/RepositoryContainer'
+import { SearchForm } from '../components/form/SearchForm'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, Plus, Scale, GitFork, Star, ListFilter } from 'lucide-react'
+import { X, Plus, Scale, GitFork, Star } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
+import { useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useState, useRef, useEffect, SyntheticEvent, RefObject } from 'react'
 import {
   searchRepositories,
   ISearchRepositoriesProps,
   licenses,
 } from '../services/searchRepositories'
-import { useSearchParams } from 'react-router-dom'
-import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
-import { RepositoryContainer } from '../components/RepositoryContainer'
-import { Pagination } from '../components/Pagination'
-import { SearchForm } from '../components/form/SearchForm'
-import { useNavigate } from 'react-router-dom'
-import { Loading } from '../components/Loading'
-import { LinkStyle } from '../components/Link'
-import MediaQuery from 'react-responsive'
-import { ButtonFilter } from './UserPage'
 
 interface IReposData {
   total_count: number
@@ -72,7 +71,9 @@ export const RepositoriesPage = () => {
   const starsInputRef = useRef<HTMLInputElement>(null)
 
   const closeFilters = () => {
-    const checkbox = document.querySelector<HTMLInputElement>('#ishow-filters')
+    const checkbox = document.querySelector<HTMLInputElement>(
+      '#show-filters-repositories-page'
+    )
     checkbox?.click()
   }
 
@@ -608,21 +609,10 @@ export const RepositoriesPage = () => {
                 {searchParameters.query}
               </Text>
               <MediaQuery maxWidth={800}>
-                <ButtonFilter width='90px' height='30px'>
-                  <input
-                    type='checkbox'
-                    name='show-filters'
-                    id='ishow-filters'
-                  />
-                  <ListFilter
-                    size={16}
-                    strokeWidth={2}
-                    className='button-filter-icon'
-                  />
-                  <Text weight='bold' size='xs'>
-                    Filtros
-                  </Text>
-                </ButtonFilter>
+                <ButtonFilter
+                  size='small'
+                  id='show-filters-repositories-page'
+                />
               </MediaQuery>
             </WrapperFlex>
 
@@ -741,12 +731,12 @@ const WrapperRepositoriesPage = styled(WrapperFlex)`
       left: 50%;
       transform: translate(-50%, -50%);
     }
-    &:has(#ishow-filters:checked) {
+    &:has(#show-filters-repositories-page:checked) {
       max-height: 100vh;
       overflow: hidden;
     }
 
-    &:has(#ishow-filters:checked) ${WrapperFilters} {
+    &:has(#show-filters-repositories-page:checked) ${WrapperFilters} {
       display: block;
     }
   }

@@ -1,10 +1,10 @@
 import MediaQuery from 'react-responsive'
 import styled from 'styled-components'
-import { Button } from '../components/form/Button'
+import { ButtonFilter } from '../components/form/ButtonFilter'
+import { ButtonTomato } from '../components/form/Button'
 import { ISearchUserRepositoriesResponse } from '../services/searchUserRepositories'
 import { ISearchUserResponse } from '../services/searchUser'
 import { Input } from '../components/form/Input'
-import { ListFilter, X, HeartCrack } from 'lucide-react'
 import { Loading } from '../components/Loading'
 import { Pagination } from '../components/Pagination'
 import { RepositoryContainer } from '../components/RepositoryContainer'
@@ -13,6 +13,7 @@ import { Select } from '../components/form/Select'
 import { Text } from '../components/Text'
 import { UserCard } from '../components/UserCard'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
+import { X, HeartCrack } from 'lucide-react'
 import { searchUser } from '../services/searchUser'
 import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
@@ -217,17 +218,7 @@ export const UserPage = () => {
             </MediaQuery>
 
             <MediaQuery minWidth={801}>
-              <ButtonFilter width='130px' height='35px'>
-                <input type='checkbox' name='show-filters' id='ishow-filters' />
-                <ListFilter
-                  size={20}
-                  strokeWidth={2.5}
-                  className='button-filter-icon'
-                />
-                <Text weight='bold' size='sm'>
-                  Filtros
-                </Text>
-              </ButtonFilter>
+              <ButtonFilter id='show-filters-userpage' />
             </MediaQuery>
 
             <MediaQuery maxWidth={800}>
@@ -303,18 +294,6 @@ const WrapperUserPage = styled(WrapperFlex)`
   }
 `
 
-const ButtonTomato = styled(Button)`
-  background: tomato;
-  border-color: tomato;
-
-  &:hover:enabled,
-  &:active {
-    background-color: initial;
-    background-position: 0 0;
-    color: tomato;
-  }
-`
-
 const WrapperFilters = styled(WrapperFlex)`
   border-radius: 4px;
 
@@ -343,7 +322,7 @@ const Header = styled(WrapperFlex)`
     display: none;
   }
 
-  &:has(#ishow-filters:checked) ${WrapperFilters} {
+  &:has(#show-filters-userpage:checked) ${WrapperFilters} {
     display: flex;
   }
 
@@ -352,34 +331,5 @@ const Header = styled(WrapperFlex)`
     ${WrapperFilters} {
       display: flex;
     }
-  }
-`
-
-export const ButtonFilter = styled(Button)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-
-  #ishow-filters {
-    all: unset;
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-    z-index: 50;
-  }
-
-  &:has(#ishow-filters:checked) {
-    background-color: transparent;
-    background-position: 0 0;
-    color: #58a6ff;
-  }
-
-  .button-filter-icon {
-    transition: 400ms;
-  }
-
-  &:has(#ishow-filters:checked) .button-filter-icon {
-    transform: rotate(180deg);
   }
 `
