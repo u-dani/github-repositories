@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Circle } from '../components/RepositoryCard'
 import { Text } from '../components/Text'
 import { WrapperFlex } from '../components/layout/WrapperFlex'
-import { X, Plus, Scale, GitFork, Star } from 'lucide-react'
+import { X, Plus, Scale, GitFork, Star, ListFilter } from 'lucide-react'
 import { removeExtraSpacesFromString } from '../services/removeExtraSpacesFromString'
 import { useState, useRef, useEffect, SyntheticEvent, RefObject } from 'react'
 import {
@@ -19,6 +19,8 @@ import { SearchForm } from '../components/form/SearchForm'
 import { useNavigate } from 'react-router-dom'
 import { Loading } from '../components/Loading'
 import { LinkStyle } from '../components/Link'
+import MediaQuery from 'react-responsive'
+import { ButtonFilter } from './UserPage'
 
 interface IReposData {
   total_count: number
@@ -68,6 +70,11 @@ export const RepositoriesPage = () => {
   const topicInputRef = useRef<HTMLInputElement>(null)
   const forksInputRef = useRef<HTMLInputElement>(null)
   const starsInputRef = useRef<HTMLInputElement>(null)
+
+  const closeFilters = () => {
+    const checkbox = document.querySelector<HTMLInputElement>('#ishow-filters')
+    checkbox?.click()
+  }
 
   const updateSearchParameter = (
     key: keyof typeof searchParameters,
@@ -189,79 +196,170 @@ export const RepositoriesPage = () => {
   }, [searchParams])
 
   return (
-    <WrapperFlex
+    <WrapperRepositoriesPage
       alignItems='start'
-      padding='40px 16px'
       gap='32px'
+      padding='clamp(16px, 3vw, 24px)'
       style={{ color: '#dddddd' }}>
-      <WrapperFlex
-        width='300px'
-        direction='column'
-        alignItems='start'
-        gap='16px'>
-        <Text weight='bold' size='lg'>
-          Filtrar por
-        </Text>
+      {/* Filters Section */}
+      <WrapperFilters>
+        <WrapperFlex direction='column' alignItems='start' gap='16px'>
+          <WrapperFlex justifyContent='space-between'>
+            <Text weight='bold' size='lg'>
+              Filtros
+            </Text>
 
-        {/* Language Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Linguagens
-          </Text>
+            <MediaQuery maxWidth='800px'>
+              <button className='close-filters-button' onClick={closeFilters}>
+                <X size={24} strokeWidth={2.5} />
+              </button>
+            </MediaQuery>
+          </WrapperFlex>
 
-          <WrapperFlex
-            direction='column'
-            onChange={e => {
-              handleFilter({
-                event: e,
-                dataAttr: 'language',
-                searchParametersKey: 'language',
-              })
-            }}>
-            {searchParameters.language ? (
-              <ListItem>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Circle language={searchParameters.language} />
-                    <Text size='sm'>{searchParameters.language}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      deleteSearchParameter('language')
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ) : (
-              <>
-                {languages.map(lang => (
-                  <ListItem>
+          {/* Language Filter */}
+          <WrapperFlex direction='column' alignItems='start' gap='4px'>
+            <Text size='sm' weight='bold' color='gray'>
+              Linguagens
+            </Text>
+
+            <WrapperFlex
+              direction='column'
+              onChange={e => {
+                handleFilter({
+                  event: e,
+                  dataAttr: 'language',
+                  searchParametersKey: 'language',
+                })
+              }}>
+              {searchParameters.language ? (
+                <ListItem>
+                  <WrapperFlex>
                     <WrapperFlex gap='8px' justifyContent='start'>
-                      <input
-                        type='radio'
-                        name='filter-language'
-                        data-language={lang}
+                      <Circle language={searchParameters.language} />
+                      <Text size='sm'>{searchParameters.language}</Text>
+                    </WrapperFlex>
+                    <X
+                      size={20}
+                      className='close-icon'
+                      onClick={() => {
+                        deleteSearchParameter('language')
+                      }}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+              ) : (
+                <>
+                  {languages.map(lang => (
+                    <ListItem>
+                      <WrapperFlex gap='8px' justifyContent='start'>
+                        <input
+                          type='radio'
+                          name='filter-language'
+                          data-language={lang}
+                        />
+                        <Circle language={lang} />
+                        <Text size='sm'>{lang}</Text>
+                      </WrapperFlex>
+                    </ListItem>
+                  ))}
+
+                  <ListItem>
+                    <WrapperFlex
+                      gap='8px'
+                      justifyContent='start'
+                      as='form'
+                      onSubmit={e =>
+                        handleSubmitFilter({
+                          event: e,
+                          ref: languageInputRef,
+                          searchParametersKey: 'language',
+                        })
+                      }>
+                      <button type='submit' style={{ all: 'unset' }}>
+                        <WrapperFlex>
+                          <Plus size={20} />
+                        </WrapperFlex>
+                      </button>
+                      <Input
+                        type='text'
+                        placeholder='Mais linguagens'
+                        ref={languageInputRef}
                       />
-                      <Circle language={lang} />
-                      <Text size='sm'>{lang}</Text>
                     </WrapperFlex>
                   </ListItem>
-                ))}
+                </>
+              )}
+            </WrapperFlex>
+          </WrapperFlex>
 
+          <Separator />
+
+          {/* License Filter */}
+          <WrapperFlex direction='column' alignItems='start' gap='4px'>
+            <Text size='sm' weight='bold' color='gray'>
+              Licenças
+            </Text>
+
+            <WrapperFlex
+              direction='column'
+              onChange={e => {
+                handleFilter({
+                  event: e,
+                  dataAttr: 'license',
+                  searchParametersKey: 'license',
+                })
+              }}>
+              {searchParameters.license ? (
+                <ListItem>
+                  <WrapperFlex>
+                    <WrapperFlex gap='8px' justifyContent='start'>
+                      <Scale size={20} />
+                      <Text size='sm'>{searchParameters.license}</Text>
+                    </WrapperFlex>
+                    <X
+                      size={20}
+                      className='close-icon'
+                      onClick={() => {
+                        deleteSearchParameter('license')
+                      }}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+              ) : (
+                <>
+                  {licensesKeys.map(license => (
+                    <ListItem>
+                      <WrapperFlex gap='8px' justifyContent='start'>
+                        <input
+                          type='radio'
+                          name='filter-license'
+                          data-license={license}
+                        />
+                        <Text size='sm'>{license}</Text>
+                      </WrapperFlex>
+                    </ListItem>
+                  ))}
+                </>
+              )}
+            </WrapperFlex>
+          </WrapperFlex>
+
+          <Separator />
+
+          {/* Topic Filter */}
+          <WrapperFlex direction='column' alignItems='start' gap='4px'>
+            <Text size='sm' weight='bold' color='gray'>
+              Tópicos
+            </Text>
+
+            <WrapperFlex direction='column'>
+              <WrapperFlex margin='0px 0px 6px 0px'>
                 <ListItem>
                   <WrapperFlex
                     gap='8px'
                     justifyContent='start'
                     as='form'
-                    onSubmit={e =>
-                      handleSubmitFilter({
-                        event: e,
-                        ref: languageInputRef,
-                        searchParametersKey: 'language',
-                      })
-                    }>
+                    onSubmit={handleSubmitTopicFilter}>
                     <button type='submit' style={{ all: 'unset' }}>
                       <WrapperFlex>
                         <Plus size={20} />
@@ -269,324 +367,389 @@ export const RepositoriesPage = () => {
                     </button>
                     <Input
                       type='text'
-                      placeholder='Mais linguagens'
-                      ref={languageInputRef}
+                      placeholder='ex: game, javascript'
+                      ref={topicInputRef}
                     />
                   </WrapperFlex>
                 </ListItem>
-              </>
-            )}
-          </WrapperFlex>
-        </WrapperFlex>
+              </WrapperFlex>
 
-        <Separator />
-
-        {/* License Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Licenças
-          </Text>
-
-          <WrapperFlex
-            direction='column'
-            onChange={e => {
-              handleFilter({
-                event: e,
-                dataAttr: 'license',
-                searchParametersKey: 'license',
-              })
-            }}>
-            {searchParameters.license ? (
-              <ListItem>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Scale size={20} />
-                    <Text size='sm'>{searchParameters.license}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      deleteSearchParameter('license')
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ) : (
-              <>
-                {licensesKeys.map(license => (
-                  <ListItem>
+              {searchParameters.topic?.map(topic => (
+                <ListItem key={topic}>
+                  <WrapperFlex>
                     <WrapperFlex gap='8px' justifyContent='start'>
-                      <input
-                        type='radio'
-                        name='filter-license'
-                        data-license={license}
+                      <Text size='sm'>{topic}</Text>
+                    </WrapperFlex>
+                    <X
+                      size={20}
+                      className='close-icon'
+                      onClick={() => {
+                        removeTopic(topic)
+                      }}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+              ))}
+            </WrapperFlex>
+          </WrapperFlex>
+
+          <Separator />
+
+          {/* Forks Filter */}
+          <WrapperFlex direction='column' alignItems='start' gap='4px'>
+            <Text size='sm' weight='bold' color='gray'>
+              Número de Forks
+            </Text>
+
+            <WrapperFlex
+              direction='column'
+              onChange={e => {
+                handleFilter({
+                  event: e,
+                  dataAttr: 'forks',
+                  searchParametersKey: 'forks',
+                })
+              }}>
+              {searchParameters.forks ? (
+                <ListItem>
+                  <WrapperFlex>
+                    <WrapperFlex gap='8px' justifyContent='start'>
+                      <GitFork size={16} strokeWidth={2} />
+                      <Text size='sm'>{searchParameters.forks}</Text>
+                    </WrapperFlex>
+                    <X
+                      size={20}
+                      className='close-icon'
+                      onClick={() => {
+                        deleteSearchParameter('forks')
+                      }}
+                    />
+                  </WrapperFlex>
+                </ListItem>
+              ) : (
+                <>
+                  <ListItem>
+                    <WrapperFlex
+                      gap='8px'
+                      justifyContent='start'
+                      as='form'
+                      onSubmit={e => {
+                        handleSubmitFilter({
+                          event: e,
+                          ref: forksInputRef,
+                          searchParametersKey: 'forks',
+                        })
+                      }}>
+                      <button
+                        type='submit'
+                        style={{ all: 'unset' }}
+                        className='button-icon'>
+                        <WrapperFlex>
+                          <GitFork size={16} strokeWidth={2} />
+                        </WrapperFlex>
+                      </button>
+                      <Input
+                        type='text'
+                        placeholder='ex: 30..50, 100'
+                        ref={forksInputRef}
                       />
-                      <Text size='sm'>{license}</Text>
                     </WrapperFlex>
                   </ListItem>
-                ))}
-              </>
-            )}
-          </WrapperFlex>
-        </WrapperFlex>
 
-        <Separator />
-
-        {/* Topic Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Tópicos
-          </Text>
-
-          <WrapperFlex direction='column'>
-            <WrapperFlex margin='0px 0px 6px 0px'>
-              <ListItem>
-                <WrapperFlex
-                  gap='8px'
-                  justifyContent='start'
-                  as='form'
-                  onSubmit={handleSubmitTopicFilter}>
-                  <button type='submit' style={{ all: 'unset' }}>
-                    <WrapperFlex>
-                      <Plus size={20} />
-                    </WrapperFlex>
-                  </button>
-                  <Input
-                    type='text'
-                    placeholder='ex: game, javascript'
-                    ref={topicInputRef}
-                  />
-                </WrapperFlex>
-              </ListItem>
+                  <WrapperFlex
+                    justifyContent='start'
+                    gap='8px'
+                    wrap
+                    margin='6px 0px 0px 12px'>
+                    {['<5', '50..100', '200', '>500'].map(opt => (
+                      <Tag>
+                        <WrapperFlex gap='8px' justifyContent='start'>
+                          <input
+                            type='radio'
+                            name='filter-forks'
+                            data-forks={opt}
+                          />
+                          <Text size='sm'>{opt}</Text>
+                        </WrapperFlex>
+                      </Tag>
+                    ))}
+                  </WrapperFlex>
+                </>
+              )}
             </WrapperFlex>
-
-            {searchParameters.topic?.map(topic => (
-              <ListItem key={topic}>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Text size='sm'>{topic}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      removeTopic(topic)
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ))}
           </WrapperFlex>
-        </WrapperFlex>
 
-        <Separator />
+          <Separator />
 
-        {/* Forks Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Número de Forks
-          </Text>
+          {/* Stars Filter */}
+          <WrapperFlex direction='column' alignItems='start' gap='4px'>
+            <Text size='sm' weight='bold' color='gray'>
+              Número de Estrelas
+            </Text>
 
-          <WrapperFlex
-            direction='column'
-            onChange={e => {
-              handleFilter({
-                event: e,
-                dataAttr: 'forks',
-                searchParametersKey: 'forks',
-              })
-            }}>
-            {searchParameters.forks ? (
-              <ListItem>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <GitFork size={16} strokeWidth={2} />
-                    <Text size='sm'>{searchParameters.forks}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      deleteSearchParameter('forks')
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ) : (
-              <>
+            <WrapperFlex
+              direction='column'
+              onChange={e => {
+                handleFilter({
+                  event: e,
+                  dataAttr: 'stars',
+                  searchParametersKey: 'stars',
+                })
+              }}>
+              {searchParameters.stars ? (
                 <ListItem>
-                  <WrapperFlex
-                    gap='8px'
-                    justifyContent='start'
-                    as='form'
-                    onSubmit={e => {
-                      handleSubmitFilter({
-                        event: e,
-                        ref: forksInputRef,
-                        searchParametersKey: 'forks',
-                      })
-                    }}>
-                    <button
-                      type='submit'
-                      style={{ all: 'unset' }}
-                      className='button-icon'>
-                      <WrapperFlex>
-                        <GitFork size={16} strokeWidth={2} />
-                      </WrapperFlex>
-                    </button>
-                    <Input
-                      type='text'
-                      placeholder='ex: 30..50, 100'
-                      ref={forksInputRef}
+                  <WrapperFlex>
+                    <WrapperFlex gap='8px' justifyContent='start'>
+                      <Star size={16} />
+                      <Text size='sm'>{searchParameters.stars}</Text>
+                    </WrapperFlex>
+                    <X
+                      size={20}
+                      className='close-icon'
+                      onClick={() => {
+                        deleteSearchParameter('stars')
+                      }}
                     />
                   </WrapperFlex>
                 </ListItem>
+              ) : (
+                <>
+                  <ListItem>
+                    <WrapperFlex
+                      gap='8px'
+                      justifyContent='start'
+                      as='form'
+                      onSubmit={e => {
+                        handleSubmitFilter({
+                          event: e,
+                          ref: starsInputRef,
+                          searchParametersKey: 'stars',
+                        })
+                      }}>
+                      <button
+                        type='submit'
+                        style={{ all: 'unset' }}
+                        className='button-icon'>
+                        <WrapperFlex>
+                          <Star size={16} />
+                        </WrapperFlex>
+                      </button>
+                      <Input
+                        type='text'
+                        placeholder='ex: 30..50, 100'
+                        ref={starsInputRef}
+                      />
+                    </WrapperFlex>
+                  </ListItem>
 
-                <WrapperFlex
-                  justifyContent='start'
-                  gap='8px'
-                  wrap
-                  margin='6px 0px 0px 12px'>
-                  {['<5', '50..100', '200', '>500'].map(opt => (
-                    <Tag>
-                      <WrapperFlex gap='8px' justifyContent='start'>
-                        <input
-                          type='radio'
-                          name='filter-forks'
-                          data-forks={opt}
-                        />
-                        <Text size='sm'>{opt}</Text>
-                      </WrapperFlex>
-                    </Tag>
-                  ))}
-                </WrapperFlex>
-              </>
-            )}
-          </WrapperFlex>
-        </WrapperFlex>
-
-        <Separator />
-
-        {/* Stars Filter */}
-        <WrapperFlex direction='column' alignItems='start' gap='4px'>
-          <Text size='sm' weight='bold' color='gray'>
-            Número de Estrelas
-          </Text>
-
-          <WrapperFlex
-            direction='column'
-            onChange={e => {
-              handleFilter({
-                event: e,
-                dataAttr: 'stars',
-                searchParametersKey: 'stars',
-              })
-            }}>
-            {searchParameters.stars ? (
-              <ListItem>
-                <WrapperFlex>
-                  <WrapperFlex gap='8px' justifyContent='start'>
-                    <Star size={16} />
-                    <Text size='sm'>{searchParameters.stars}</Text>
-                  </WrapperFlex>
-                  <X
-                    size={20}
-                    className='close-icon'
-                    onClick={() => {
-                      deleteSearchParameter('stars')
-                    }}
-                  />
-                </WrapperFlex>
-              </ListItem>
-            ) : (
-              <>
-                <ListItem>
                   <WrapperFlex
-                    gap='8px'
                     justifyContent='start'
-                    as='form'
-                    onSubmit={e => {
-                      handleSubmitFilter({
-                        event: e,
-                        ref: starsInputRef,
-                        searchParametersKey: 'stars',
-                      })
-                    }}>
-                    <button
-                      type='submit'
-                      style={{ all: 'unset' }}
-                      className='button-icon'>
-                      <WrapperFlex>
-                        <Star size={16} />
-                      </WrapperFlex>
-                    </button>
-                    <Input
-                      type='text'
-                      placeholder='ex: 30..50, 100'
-                      ref={starsInputRef}
-                    />
+                    gap='8px'
+                    wrap
+                    margin='6px 0px 0px 12px'>
+                    {['0..100', '200', '<200', '>500', '>1000'].map(opt => (
+                      <Tag>
+                        <WrapperFlex gap='8px' justifyContent='start'>
+                          <input
+                            type='radio'
+                            name='filter-stars'
+                            data-stars={opt}
+                          />
+                          <Text size='sm'>{opt}</Text>
+                        </WrapperFlex>
+                      </Tag>
+                    ))}
                   </WrapperFlex>
-                </ListItem>
-
-                <WrapperFlex
-                  justifyContent='start'
-                  gap='8px'
-                  wrap
-                  margin='6px 0px 0px 12px'>
-                  {['0..100', '200', '<200', '>500', '>1000'].map(opt => (
-                    <Tag>
-                      <WrapperFlex gap='8px' justifyContent='start'>
-                        <input
-                          type='radio'
-                          name='filter-stars'
-                          data-stars={opt}
-                        />
-                        <Text size='sm'>{opt}</Text>
-                      </WrapperFlex>
-                    </Tag>
-                  ))}
-                </WrapperFlex>
-              </>
-            )}
+                </>
+              )}
+            </WrapperFlex>
           </WrapperFlex>
         </WrapperFlex>
-      </WrapperFlex>
+      </WrapperFilters>
 
       {/* Repos Section */}
-      <WrapperFlex direction='column' alignItems='start' gap='16px'>
-        <SearchForm
-          WrapperFlexProps={{ width: '100%' }}
-          SelectProps={{
-            id: 'search-form-repositories-page',
-            width: '150px',
-            defaultSelectedValue: 'Repositórios',
-          }}
-        />
+      <WrapperFlex
+        direction='column'
+        alignItems='start'
+        gap='24px'
+        width='100%'>
+        <MediaQuery minWidth='901px'>
+          <SearchForm
+            WrapperFlexProps={{ width: '100%' }}
+            SelectProps={{
+              id: 'search-form-repositories-page',
+              width: '150px',
+              defaultSelectedValue: 'Repositórios',
+            }}
+          />
+        </MediaQuery>
+
+        <MediaQuery maxWidth='900px'>
+          <SearchForm
+            WrapperFlexProps={{ width: '100%' }}
+            SelectProps={{
+              id: 'search-form-repositories-page',
+              width: '120px',
+              defaultSelectedValue: 'Repositórios',
+            }}
+          />
+        </MediaQuery>
 
         {isLoading ? (
-          <WrapperFlex direction='column' gap='4px' height='80vh'>
+          <WrapperFlex direction='column' gap='4px' height='300px'>
             <Loading />
             <Text>Buscando repositórios...</Text>
           </WrapperFlex>
         ) : (
           <>
-            <Text weight='bold'>
-              {formatNumber(reposData?.total_count ?? 0)} resultados de{' '}
-              {searchParameters.query}
-            </Text>
+            <WrapperFlex justifyContent='space-between'>
+              <Text weight='bold'>
+                {formatNumber(reposData?.total_count ?? 0)} resultados de{' '}
+                {searchParameters.query}
+              </Text>
+              <MediaQuery maxWidth={800}>
+                <ButtonFilter width='90px' height='30px'>
+                  <input
+                    type='checkbox'
+                    name='show-filters'
+                    id='ishow-filters'
+                  />
+                  <ListFilter
+                    size={16}
+                    strokeWidth={2}
+                    className='button-filter-icon'
+                  />
+                  <Text weight='bold' size='xs'>
+                    Filtros
+                  </Text>
+                </ButtonFilter>
+              </MediaQuery>
+            </WrapperFlex>
+
             <RepositoryContainer repos={reposData?.items} />
             {maxPages > 1 && <Pagination maxPages={maxPages} />}
           </>
         )}
       </WrapperFlex>
-    </WrapperFlex>
+    </WrapperRepositoriesPage>
   )
 }
 
 const Separator = styled.span`
   width: 100%;
   border-top: 1px solid #333;
+`
+
+const WrapperFilters = styled.div`
+  position: sticky;
+  top: 0;
+  height: 90vh;
+  overflow: hidden auto;
+  min-width: 260px;
+  width: 260px;
+  max-width: 260px;
+  padding-top: 8px;
+
+  .close-filters-button {
+    display: none;
+    all: unset;
+    cursor: pointer;
+    align-items: center;
+
+    &:hover {
+      color: #58a6ff;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  &::-webkit-scrollbar-corner,
+  &::-webkit-scrollbar-track {
+    background-color: rgb(64, 64, 64);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(96, 96, 96);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(112, 112, 112);
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: rgb(128, 128, 128);
+  }
+
+  /* Buttons */
+  &::-webkit-scrollbar-button:single-button {
+    display: block;
+    background-color: rgb(64, 64, 64);
+    background-size: 10px;
+    background-repeat: no-repeat;
+  }
+
+  /* Up */
+  &::-webkit-scrollbar-button:single-button:vertical:decrement {
+    height: 12px;
+    width: 16px;
+    background-position: center 4px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(96, 96, 96)'><polygon points='50,00 0,50 100,50'/></svg>");
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(112, 112, 112)'><polygon points='50,00 0,50 100,50'/></svg>");
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:decrement:active {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(128, 128, 128)'><polygon points='50,00 0,50 100,50'/></svg>");
+  }
+
+  /* Down */
+  &::-webkit-scrollbar-button:single-button:vertical:increment {
+    height: 12px;
+    width: 16px;
+    background-position: center 2px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(96, 96, 96)'><polygon points='0,0 100,0 50,50'/></svg>");
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:increment:hover {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(112, 112, 112)'><polygon points='0,0 100,0 50,50'/></svg>");
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:increment:active {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(128, 128, 128)'><polygon points='0,0 100,0 50,50'/></svg>");
+  }
+`
+
+const WrapperRepositoriesPage = styled(WrapperFlex)`
+  @media screen and (max-width: 800px) {
+    & ${WrapperFilters} {
+      display: none;
+      position: absolute;
+      background-color: #222;
+      padding: 24px;
+      height: 100vh;
+      min-width: 100vw;
+      width: 100vw;
+      z-index: 50;
+      border-radius: 8px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &:has(#ishow-filters:checked) {
+      max-height: 100vh;
+      overflow: hidden;
+    }
+
+    &:has(#ishow-filters:checked) ${WrapperFilters} {
+      display: block;
+    }
+  }
 `
 
 const Tag = styled(LinkStyle).attrs(() => ({
