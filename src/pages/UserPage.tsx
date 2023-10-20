@@ -289,6 +289,7 @@ export const UserPage = () => {
 }
 
 const WrapperUserPage = styled(WrapperFlex)`
+  max-width: 1400px;
   align-items: start;
   padding: 40px;
   gap: 32px;
