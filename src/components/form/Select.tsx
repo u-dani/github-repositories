@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { ChevronDown } from 'lucide-react'
 import { WrapperFlex } from '../layout/WrapperFlex'
+import { Checkbox } from './Checkbox'
 
 export interface ISelectProps {
   id: string
@@ -13,14 +14,91 @@ export interface ISelectProps {
   handleSelect: (selectedTargetValue: string) => void
 }
 
-const Checkbox = styled.input.attrs(() => ({
-  type: 'checkbox',
-}))`
-  all: unset;
-  position: absolute;
-  inset: 0;
-  cursor: pointer;
-`
+export const Select = ({
+  id,
+  fontSize,
+  height,
+  options,
+  placeholder,
+  selectedValue,
+  width,
+  handleSelect,
+}: ISelectProps) => {
+  const checkbox = document.querySelector<HTMLInputElement>(`#${id}`)
+
+  const handle = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    const selectedTargetValue = target.getAttribute('data-option')
+
+    if (selectedTargetValue) {
+      handleSelect(selectedTargetValue)
+    }
+
+    if (checkbox) {
+      checkbox.checked = false
+    }
+  }
+
+  return (
+    <SelectStyle
+      width={width}
+      height={height}
+      fontSize={fontSize}
+      onMouseLeave={() => {
+        if (checkbox) {
+          checkbox.checked = false
+        }
+      }}>
+      <input type='checkbox' id={id} />
+
+      <WrapperFlex
+        justifyContent='space-between'
+        className='container-selected-value'
+        gap='4px'>
+        <span className='selected-value'>
+          {selectedValue ?? placeholder ?? 'Selecione'}
+        </span>
+        <ChevronDown className='icon-rotate' />
+      </WrapperFlex>
+
+      <div className='container-options'>
+        <WrapperFlex
+          as='form'
+          className='form-options'
+          onChange={handle}
+          direction='column'
+          alignItems='start'>
+          {options.map(option => (
+            <label htmlFor={option} className='option' key={option}>
+              <input
+                type='radio'
+                name='options'
+                id={option}
+                data-option={option}
+                defaultChecked={selectedValue === option}
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+        </WrapperFlex>
+      </div>
+
+      <div className='gambiarra'>
+        <p className='warning'>
+          Do not remove this div, when the mouse leaves the Select it closes and
+          there is a little space between the Select and the Options, this
+          minimum space is enough to close the Select, so this div covers this
+          space :D
+        </p>
+        <p className='warning'>
+          Não remova essa div, quando o mouse sai do Select ele fecha e fica um
+          espacinho entre o Select e as Options, esse espaço mínimo é suficiente
+          para fechar o Select, então essa div cobre esse espaço :P
+        </p>
+      </div>
+    </SelectStyle>
+  )
+}
 
 const SelectStyle = styled.div<
   Pick<ISelectProps, 'height' | 'width' | 'fontSize'>
@@ -45,21 +123,28 @@ const SelectStyle = styled.div<
     cursor: pointer;
   }
 
-  ${Checkbox}:checked + .container-selected-value {
+  input[type='checkbox'] {
+    all: unset;
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  input[type='checkbox']:checked + .container-selected-value {
     border: 1px solid rgba(250, 250, 250, 0.8);
     color: rgba(250, 250, 250, 0.8);
   }
 
-  ${Checkbox}:checked ~ .container-options {
+  input[type='checkbox']:checked ~ .container-options {
     display: flex;
+  }
+
+  input[type='checkbox']:checked ~ .container-selected-value > .icon-rotate {
+    transform: rotate(180deg);
   }
 
   .icon-rotate {
     transition: 200ms ease-in;
-  }
-
-  ${Checkbox}:checked ~ .container-selected-value > .icon-rotate {
-    transform: rotate(180deg);
   }
 
   input[type='radio'] {
@@ -128,89 +213,3 @@ const SelectStyle = styled.div<
     }
   }
 `
-
-export const Select = ({
-  id,
-  fontSize,
-  height,
-  options,
-  placeholder,
-  selectedValue,
-  width,
-  handleSelect,
-}: ISelectProps) => {
-  const checkbox = document.querySelector<HTMLInputElement>(`#${id}`)
-
-  const handle = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLInputElement
-    const selectedTargetValue = target.getAttribute('data-option')
-
-    if (selectedTargetValue) {
-      handleSelect(selectedTargetValue)
-    }
-
-    if (checkbox) {
-      checkbox.checked = false
-    }
-  }
-
-  return (
-    <SelectStyle
-      width={width}
-      height={height}
-      fontSize={fontSize}
-      onMouseLeave={() => {
-        if (checkbox) {
-          checkbox.checked = false
-        }
-      }}>
-      <Checkbox id={id} />
-
-      <WrapperFlex
-        justifyContent='space-between'
-        className='container-selected-value'
-        gap='4px'>
-        <span className='selected-value'>
-          {selectedValue ?? placeholder ?? 'Selecione'}
-        </span>
-        <ChevronDown className='icon-rotate' />
-      </WrapperFlex>
-
-      <div className='container-options'>
-        <WrapperFlex
-          as='form'
-          className='form-options'
-          onChange={handle}
-          direction='column'
-          alignItems='start'>
-          {options.map(option => (
-            <label htmlFor={option} className='option' key={option}>
-              <input
-                type='radio'
-                name='options'
-                id={option}
-                data-option={option}
-                defaultChecked={selectedValue === option}
-              />
-              <span>{option}</span>
-            </label>
-          ))}
-        </WrapperFlex>
-      </div>
-
-      <div className='gambiarra'>
-        <p className='warning'>
-          Do not remove this div, when the mouse leaves the Select it closes and
-          there is a little space between the Select and the Options, this
-          minimum space is enough to close the Select, so this div covers this
-          space :D
-        </p>
-        <p className='warning'>
-          Não remova essa div, quando o mouse sai do Select ele fecha e fica um
-          espacinho entre o Select e as Options, esse espaço mínimo é suficiente
-          para fechar o Select, então essa div cobre esse espaço :P
-        </p>
-      </div>
-    </SelectStyle>
-  )
-}
