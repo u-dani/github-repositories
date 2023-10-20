@@ -41,3 +41,15 @@ export const Button = styled.button<IButtonProps>`
     color: #333;
   }
 `
+
+export const ButtonTomato = styled(Button)`
+  background: tomato;
+  border-color: tomato;
+
+  &:hover:enabled,
+  &:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: tomato;
+  }
+`
