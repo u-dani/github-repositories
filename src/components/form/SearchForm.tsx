@@ -45,7 +45,8 @@ export const SearchForm = ({
     }
 
     if (selectedValue === 'Usuários') {
-      return navigate(`/usuario/${searchInputValue}`)
+      const username = searchInputValue.replace(/ /g, '')
+      return navigate(`/usuario/${username}`)
     } else if (selectedValue === 'Repositórios') {
       return navigate(`/repositorios?search=${searchInputValue}`)
     }
