@@ -4,9 +4,7 @@ import { WrapperFlex } from './components/layout/WrapperFlex'
 function App() {
   return (
     <WrapperFlex>
-      <WrapperFlex maxWidth='1300px'>
-        <Outlet />
-      </WrapperFlex>
+      <Outlet />
     </WrapperFlex>
   )
 }
