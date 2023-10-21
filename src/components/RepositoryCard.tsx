@@ -82,7 +82,7 @@ export const RepositoryCard = ({
         {homepage && (
           <WrapperFlex width='min-content' margin='2px 0px 0px 0px'>
             <Link to={homepage} variant='button' target='_blank'>
-              <WrapperFlex padding='6px 8px'>
+              <WrapperFlex padding='2px'>
                 <Text weight='bold' size='xs'>
                   DEMO
                 </Text>
@@ -111,7 +111,7 @@ export const RepositoryCard = ({
             to={`https://github.com/topics/${topic}`}
             key={topic}
             variant='tag'>
-            <Text size='sm' weight='bold'>
+            <Text size='sm' weight='bold' style={{ display: 'flex' }}>
               {topic}
             </Text>
           </Link>
