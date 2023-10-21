@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Select } from './Select'
 import { useArgs } from '@storybook/client-api'
 
-const options = ['Usuários', 'Repositórios']
+const options = ['Bananas', 'Maçãs', 'Uvas', 'Melancia', 'Limão']
 
 const meta: Meta<typeof Select> = {
   title: 'Form/Select',
@@ -24,7 +24,7 @@ const meta: Meta<typeof Select> = {
   args: {
     options: options,
     width: '300px',
-    placeholder: 'Selecione',
+    placeholder: 'Selecione uma fruta',
     fontSize: '0.975rem',
   },
 }

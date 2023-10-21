@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SearchForm } from './SearchForm'
 import { BrowserRouter } from 'react-router-dom'
-
-// import { useArgs } from '@storybook/client-api'
-
-// const options = ['Usuários', 'Repositórios']
+import { SearchForm } from './SearchForm'
 
 const meta: Meta<typeof SearchForm> = {
   title: 'Form/SearchForm',
