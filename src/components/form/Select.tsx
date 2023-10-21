@@ -105,6 +105,7 @@ const SelectStyle = styled.div<
   position: relative;
   font-size: ${({ fontSize }) => fontSize ?? '0.875rem'};
   min-width: ${({ width }) => width ?? '100%'};
+  width: ${({ width }) => width ?? '100%'};
 
   .selected-value {
     width: 100%;
