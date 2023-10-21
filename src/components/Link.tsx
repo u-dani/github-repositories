@@ -31,10 +31,6 @@ export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
           border-radius: 10px;
           font-weight: 500;
 
-          .wrapper {
-            display: flex;
-          }
-
           &:hover {
             color: rgba(250, 250, 250, 0.9);
             text-decoration: none;
@@ -52,6 +48,7 @@ export const LinkStyle = styled.span<Pick<ILinkProps, 'variant'>>`
           color: rgba(250, 250, 250, 0.9);
           letter-spacing: 0.8px;
           transition: all 0.5s;
+          padding: 4px 8px;
 
           &:hover,
           &:active {
@@ -77,7 +74,7 @@ export const Link = ({
   return (
     <LinkStyle variant={variant}>
       <LinkRouter to={to} target={target} style={{ color: 'currentColor' }}>
-        <span className='wrapper'>{children}</span>
+        <span>{children}</span>
       </LinkRouter>
     </LinkStyle>
   )
