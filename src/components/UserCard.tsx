@@ -133,7 +133,7 @@ export const UserCard = ({
 
           <WrapperFlex margin='8px 0px'>
             <Link to={props.html_url} variant='button' target='_blank'>
-              <WrapperFlex padding='6px 8px' height='35px'>
+              <WrapperFlex height='30px'>
                 <Text weight='bold' size='sm'>
                   VISITAR
                 </Text>
