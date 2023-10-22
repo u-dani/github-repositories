@@ -19,16 +19,26 @@ import { searchUserRepositories } from '../services/searchUserRepositories'
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
-export const UserPage = () => {
+type sbProps = {
+  user?: ISearchUserResponse
+  repos?: ISearchUserRepositoriesResponse[]
+  isLoading?: boolean
+  userNotFound?: boolean
+  reposNotFound?: boolean
+}
+
+export const UserPage = (sb: sbProps) => {
   const { user: username } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const [userData, setUserData] = useState<ISearchUserResponse | undefined>()
+  const [userData, setUserData] = useState<ISearchUserResponse | undefined>(
+    sb?.user
+  )
   const [reposData, setReposData] = useState<
     ISearchUserRepositoriesResponse[] | undefined
-  >()
+  >(sb?.repos)
 
   const [repositoryFilterInput, setRepositoryFilterInput] = useState('')
   const [languageSelectedValue, setLanguageSelectedValue] = useState<
@@ -141,6 +151,16 @@ export const UserPage = () => {
     request()
   }, [username])
 
+  useEffect(() => {
+    if (Object.keys(sb).length === 0) {
+      sb.userNotFound ? setUserData(undefined) : setUserData(sb.user)
+      sb.reposNotFound || sb.userNotFound
+        ? setReposData(undefined)
+        : setReposData(sb.repos)
+      sb.isLoading ? setIsLoading(true) : setIsLoading(false)
+    }
+  }, [sb])
+
   return (
     <WrapperUserPage>
       <MediaQuery maxWidth={800}>
@@ -177,7 +197,6 @@ export const UserPage = () => {
           )}
         </WrapperFlex>
       </MediaQuery>
-
       {/* User Card Data Mobile */}
       <MediaQuery maxWidth={800}>
         <WrapperFlex>
@@ -200,7 +219,6 @@ export const UserPage = () => {
           )}
         </WrapperFlex>
       </MediaQuery>
-
       <WrapperFlex direction='column' gap='16px'>
         <Header direction='column' gap='16px'>
           <WrapperFlex gap='16px' justifyContent='space-between'>

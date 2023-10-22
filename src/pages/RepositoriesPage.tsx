@@ -28,7 +28,14 @@ interface IReposData {
 
 const licensesKeys = Object.keys(licenses)
 
-export const RepositoriesPage = () => {
+type sbProps = {
+  repos?: IReposData
+  query?: string
+  reposNotFound?: boolean
+  isLoading?: boolean
+}
+
+export const RepositoriesPage = (sb: sbProps) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -54,7 +61,7 @@ export const RepositoriesPage = () => {
   }
 
   const [isLoading, setIsLoading] = useState(true)
-  const [reposData, setReposData] = useState<IReposData | undefined>()
+  const [reposData, setReposData] = useState<IReposData | undefined>(sb.repos)
 
   const languages = [
     ...new Set(reposData?.items.map(repos => repos.language)),
@@ -195,6 +202,13 @@ export const RepositoriesPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
+
+  useEffect(() => {
+    if (Object.keys(sb).length === 0) {
+      sb.isLoading ? setIsLoading(true) : setIsLoading(false)
+      sb.reposNotFound ? setReposData(undefined) : setReposData(sb.repos)
+    }
+  }, [sb])
 
   return (
     <WrapperRepositoriesPage
@@ -606,7 +620,7 @@ export const RepositoriesPage = () => {
             <WrapperFlex justifyContent='space-between'>
               <Text weight='bold'>
                 {formatNumber(reposData?.total_count ?? 0)} resultados de{' '}
-                {searchParameters.query}
+                {searchParameters.query || sb.query}
               </Text>
               <MediaQuery maxWidth={800}>
                 <ButtonFilter
