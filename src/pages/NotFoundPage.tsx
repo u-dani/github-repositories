@@ -15,7 +15,8 @@ export const NotFoundPage = () => {
         direction='column'
         padding='8px'
         maxWidth='500px'
-        height='100vh'>
+        height='100vh'
+        style={{ minHeight: '500px' }}>
         <WrapperFlex direction='column' style={{ flex: 1 }}>
           <img
             src={illustration404}
