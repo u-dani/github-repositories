@@ -4,8 +4,8 @@ Site de busca por repositórios do Github, você pode obter os repositórios pú
 
 ## 🌠 Demo
 
-Github Pages -> https://u-dani.github.io/github-repositories
-Chromatic Storybook -> https://www.chromatic.com/library?appId=65394b9ac45921e42996fd63
+▲ Site -> https://github-repositories-tan.vercel.app/ <br/>
+📔 Chromatic Storybook -> https://www.chromatic.com/library?appId=65394b9ac45921e42996fd63
 
 ## 🛠️ Tecnologias & Ferramentas Usadas
 
